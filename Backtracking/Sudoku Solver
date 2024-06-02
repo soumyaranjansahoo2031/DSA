@@ -1,0 +1,75 @@
+import java.util.Scanner;
+
+public class Sudoku_Solver {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t=1;
+		while(t-- > 0) {
+			int grid[][]=new int[][] {
+				{6,0,0,4,5,3,9,7,0},
+				{4,0,0,0,0,0,3,0,0},
+				{0,0,0,6,0,0,0,0,0},
+				{2,0,0,0,0,0,0,0,0},
+				{9,0,1,7,3,0,5,4,0},
+				{0,0,0,0,4,0,0,9,0},
+				{0,7,0,0,0,1,0,2,0},
+				{0,0,8,0,6,0,0,0,0},
+				{3,0,0,5,9,0,8,0,0},
+			};
+			Solution ob = new Solution();
+			ob.solveSudoku(grid);
+			printGrid(grid);
+		}
+	}
+
+	private static void printGrid(int[][] grid) {
+		for(int i=0;i<9;i++){
+	        for(int j =0;j<9;j++){
+	            System.out.print(grid[i][j]+" ");
+	        }
+	         System.out.println();
+	    }
+	}
+}
+class Solution {
+    
+    public void solveSudoku(int[][] board) {
+        fun(board,0,0);
+	}
+	private boolean fun(int[][] board,int x,int y){
+	    if(x==9){
+	        return true;
+	    }
+	    if(y==9){
+	        return fun(board,x+1,0);
+	    }
+	    if(board[x][y]!=0){
+	    	return fun(board,x,y+1);
+	    }
+	    for(int i=1;i<=9;i++){
+	        boolean check = isValid(board,x,y,i);
+	        if(check){
+	            board[x][y]=i;
+	            if(fun(board,x,y+1)) return true;
+	            board[x][y]=0;
+	        }
+	    }
+	    return false;
+	}
+	private boolean isValid(int[][] board , int row,int col,int val){
+	    for(int index=0;index<9;index++){
+	        if(board[row][index]==(val) ) return false;
+	        if(board[index][col]==val ) return false;
+	    }
+	    int start_row = (row/3)*3;
+	    int start_col = (col/3)*3;
+	    for(int i=start_row;i<start_row+3;i++){
+	        for(int j = start_col;j<start_col+3;j++){
+	            if(board[i][j]==val) return false;
+	        }
+	    }
+	    return true;
+    }
+}
+
+
