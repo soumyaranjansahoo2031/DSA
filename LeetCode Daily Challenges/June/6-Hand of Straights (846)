@@ -1,0 +1,30 @@
+class Solution {
+    public boolean isNStraightHand(int[] hand, int k) {
+        int n = hand.length;
+        if(n%k!=0) return false;
+        Arrays.sort(hand);
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            map.put(hand[i],map.getOrDefault(hand[i],0)+1);
+        }
+        for(int i=0;i<n;i++){
+            if(map.get(hand[i])>0){
+                map.put(hand[i],map.get(hand[i])-1);
+                for(int j=1;j<k;j++){
+                    if(map.getOrDefault(hand[i]+j,0)>0){
+                        map.put(hand[i]+j,map.get(hand[i]+j)-1);
+                    }
+                    else return false;
+                }   
+            }
+        }
+        return true;
+    }
+}
+
+//Alice has some number of cards and she wants to rearrange the cards into groups 
+//so that each group is of size groupSize, and consists of groupSize consecutive cards.
+
+//Given an integer array hand where hand[i] is the value written on the ith card 
+//and an integer groupSize,
+// return true if she can rearrange the cards, or false otherwise.
