@@ -1,0 +1,36 @@
+class Solution {
+    public List<String> commonChars(String[] words) {
+        HashMap<Character,Integer> map = new HashMap<>();
+        String word = words[0];
+        for(int i=0;i<word.length();i++){
+            map.put(word.charAt(i),map.getOrDefault(word.charAt(i),0)+1);
+        }
+        // HashMap<Character,Integer> ans = new HashMap<>();
+        for(int i=1;i<words.length;i++){
+            word = words[i];
+            HashMap<Character,Integer> map2 = new HashMap<>();
+            for(int index=0;index<word.length();index++){
+                map2.put(word.charAt(index),map2.getOrDefault(word.charAt(index),0)+1);
+            }
+            for(Map.Entry<Character,Integer> m : map.entrySet()){
+                char val = m.getKey();
+                int freq = m.getValue();
+                if(!map2.containsKey(val)) map.put(val,0);
+                else map.put(val,Math.min(freq,map2.get(val)));
+            }
+        }
+        ArrayList<String> arr = new ArrayList<>();
+        for(Map.Entry<Character,Integer> m : map.entrySet()){
+            int num=0;
+            while(num<m.getValue()){
+                arr.add(m.getKey()+"");
+                num++;
+            }
+        }
+        return arr;
+    }
+}
+
+//Given a string array words, 
+//return an array of all characters that show up in all strings within the words (including duplicates).
+//You may return the answer in any order.
