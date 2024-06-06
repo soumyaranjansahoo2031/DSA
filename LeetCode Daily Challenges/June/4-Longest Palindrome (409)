@@ -1,0 +1,26 @@
+class Solution {
+    public int longestPalindrome(String s) {
+        HashMap<Character,Integer> map = new HashMap<>();
+
+        for(int i=0;i<s.length();i++){
+            map.put(s.charAt(i),map.getOrDefault(s.charAt(i),0)+1);
+        }
+        boolean check =false;
+        int ans =0;
+        for(Map.Entry<Character,Integer> m:map.entrySet()){
+            if(m.getValue()%2==0){
+                ans+=m.getValue();
+            }
+            else{
+                ans+=m.getValue()-1;
+                check = true;
+            }
+        }
+        return (check)?ans+1:ans;
+    }
+}
+
+// Given a string s which consists of lowercase or uppercase letters, 
+//return the length of the longest palindrome that can be built with those letters.
+
+// Letters are case sensitive, for example, "Aa" is not considered a palindrome.
