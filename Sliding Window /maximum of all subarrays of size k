@@ -15,9 +15,8 @@ class Solution
             if(dq.isEmpty()) dq.addLast(i);
             else{
                 if(dq.peekFirst() <= i-k) dq.pollFirst();
-                while(!dq.isEmpty()){
-                    if(arr[dq.peekLast()] > arr[i]) break;
-                    else dq.pollLast();
+                while(!dq.isEmpty() && arr[dq.peekLast()] <= arr[i]){
+                    dq.pollLast();
                 }
                 dq.addLast(i);
             }
