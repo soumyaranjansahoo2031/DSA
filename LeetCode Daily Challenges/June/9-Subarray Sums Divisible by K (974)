@@ -1,0 +1,41 @@
+
+
+class Solution {
+    public int subarraysDivByK(int[] nums, int k) {
+        int n = nums.length;
+
+        int[] prefix = new int[n];
+        prefix[0]=nums[0];
+        for(int i=1;i<n;i++){
+            prefix[i]=prefix[i-1]+nums[i];
+        }
+        // System.out.println(Arrays.toString(prefix));
+        int count = 0;
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        map.put(0,new ArrayList<>(List.of(-1)));
+        for(int i=0;i<n;i++){
+            // System.out.println(map);
+            int val = prefix[i]%k;
+            if(prefix[i] < 0){
+                val = (prefix[i]-(prefix[i]/k)*k +k)%k;
+            }
+            if(!map.containsKey(val)){
+                List<Integer> newList = new ArrayList<>();
+                newList.add(i);
+                map.put(val,newList);
+            }
+            else{
+                count += map.get(val).size();
+                map.get(val).add(i);
+            }
+            
+        }
+        return count;
+    }
+}
+
+
+// Given an integer array nums and an integer k, 
+// return the number of non-empty subarrays that have a sum divisible by k.
+
+// A subarray is a contiguous part of an array.
