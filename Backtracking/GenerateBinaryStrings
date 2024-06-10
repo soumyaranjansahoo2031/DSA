@@ -1,0 +1,39 @@
+package com.practice;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class binary_string_n1 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		List<String> result = generateBinaryStrings(3);
+		System.out.println(result);
+
+	}
+	public static List<String> generateBinaryStrings(int k){
+		List<String> li = new ArrayList<>();
+		int index = 0;
+		fun(li,k,new StringBuilder(),index);
+		return li;
+	}
+	private static void fun(List<String> li, int k, StringBuilder sb, int index) {
+		System.out.println(index+" "+sb );
+		if(index==k) {
+			li.add(sb.toString());
+			return;
+		}
+		
+		sb.append("0");
+		fun(li,k,sb,index+1);
+		sb.deleteCharAt(sb.length() - 1);     // backtracking
+		System.out.println(index+" "+sb );
+		
+		if(sb.length() == 0 || sb.charAt(sb.length()-1)!='1') {
+			sb.append("1");
+			fun(li,k,sb,index+1);
+			sb.deleteCharAt(sb.length() - 1);  // backtracking
+		}
+	}
+
+}
