@@ -1,0 +1,68 @@
+// https://www.geeksforgeeks.org/batch/dsa-4/track/DSASP-Graph/problem/distance-of-nearest-cell-having-1-1587115620
+
+#Graph #BFS 
+
+class Solution
+{
+    //Function to find distance of nearest 1 in the grid for each cell.
+    public int[][] nearest(int[][] grid)
+    {
+        // Code here
+        int n = grid.length;
+        int m = grid[0].length;
+        int[][] result = new int[n][m];
+        
+        boolean[][] visited = new boolean[n][m];
+        Queue<Pair> q = new LinkedList<>();
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==1){
+                    q.add(new Pair(i,j,0));
+                    visited[i][j]=true;
+                }
+            }
+        }
+        
+        int[] x_n =new int[]{-1,1,0,0};
+        int[] y_n =new int[]{0,0,-1,1};
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int x = p.x;
+            int y = p.y;
+            int count = p.count;
+            result[x][y]=count;
+            for(int i=0;i<4;i++){
+                int nx = x+x_n[i];
+                int ny = y+y_n[i];
+                if(nx < 0 || nx == n || ny < 0 || ny == m) continue;
+                else{
+                    if(!visited[nx][ny]){
+                        q.add(new Pair(nx,ny,count+1));
+                        visited[nx][ny]=true;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    private class Pair{
+        int x;
+        int y;
+        int count;
+        Pair(int x,int y,int count){
+            this.x =x;
+            this.y=y;
+            this.count =count;
+        }
+    }
+}
+
+
+// Given a binary grid of n*m. 
+// Find the distance of the nearest 1 in the grid for each cell.
+
+// The distance is calculated as |i1  - i2| + |j1 - j2|, 
+// where i1, j1 are the row number and column number of the current cell,
+// and i2, j2 are the row number and column number of the nearest cell having value 1. 
+// There should be atleast one 1 in the grid
