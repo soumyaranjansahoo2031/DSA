@@ -1,6 +1,6 @@
 // https://www.geeksforgeeks.org/batch/dsa-4/track/DSASP-Graph/problem/find-the-number-of-islands
 
-#Graph #bfs
+#Graph #bfs #dfs
 
 class Solution {
     // Function to find the number of islands.
