@@ -1,0 +1,70 @@
+// https://www.geeksforgeeks.org/batch/dsa-4/track/DSASP-Graph/problem/rotten-oranges2536
+
+#Graph  #bfs
+
+class Solution
+{
+    //Function to find minimum time required to rot all oranges. 
+    public int orangesRotting(int[][] grid)
+    {
+        // Code here
+        int n=grid.length;
+        int m = grid[0].length;
+        int zeros=0;
+        boolean[][] visited = new boolean[n][m];
+        Queue<Pair> q= new LinkedList<>();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==2){
+                    q.add(new Pair(i,j,0));
+                    visited[i][j]=true;
+                }
+                if(grid[i][j]==0) zeros++;
+            }
+        }
+        int[] x_dir=new int[]{1,-1,0,0};
+        int[] y_dir=new int[]{0,0,1,-1};
+        int count = 0;
+        int steps =0;
+        
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int x = p.i;
+            int y = p.j;
+            steps = p.step;
+            // System.out.println(x+" "+y+" "+steps);
+            count++;
+            for(int i=0;i<4;i++){
+                int nx = x+x_dir[i];
+                int ny = y+y_dir[i];
+                
+                if(nx >=0 && nx < n && ny >=0 && ny < m && !visited[nx][ny]){
+                    if(grid[nx][ny]==1) q.add(new Pair(nx,ny,steps+1));
+                    visited[nx][ny] = true;
+                }
+            }
+        }
+        return zeros+count < n*m ? -1 : steps;
+        
+    }
+    private class Pair{
+        int i;
+        int j;
+        int step;
+        Pair(int i,int j,int step){
+            this.i = i;
+            this.j = j;
+            this.step = step;
+        }
+    }
+}
+
+
+// Given a grid of dimension nxm where each cell in the grid can have values 0, 1 or 2 which has the following meaning:
+// 0 : Empty cell
+// 1 : Cells have fresh oranges
+// 2 : Cells have rotten oranges
+
+// We have to determine what is the earliest time after which all the oranges are rotten. 
+// A rotten orange at index [i,j] can rot other fresh orange at indexes 
+// [i-1,j], [i+1,j], [i,j-1], [i,j+1] (up, down, left and right) in unit time. 
