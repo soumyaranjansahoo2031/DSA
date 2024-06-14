@@ -1,0 +1,62 @@
+// https://www.geeksforgeeks.org/batch/dsa-4/track/DSASP-Graph/problem/find-the-number-of-islands
+
+#Graph #bfs
+
+class Solution {
+    // Function to find the number of islands.
+    private class Pair{
+        int i;
+        int j;
+        Pair(int i,int j){
+            this.i = i;
+            this.j = j;
+        }
+    }
+    public int numIslands(char[][] grid) {
+        // Code here
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean[][] visited = new boolean[n][m];
+        
+        int ans = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]=='1' && !visited[i][j]){
+                    visited[i][j]=true;
+                    bfs(grid,n,m,visited,i,j);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+    private void bfs(char[][] grid,int n,int m,boolean[][] visited,int x1,int y1){
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(x1,y1));
+        
+        int[] x_dir = new int[]{-1,-1,0,1,1,1,0,-1};
+        int[] y_dir = new int[]{0,1,1,1,0,-1,-1,-1};
+        
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int x = p.i;
+            int y = p.j;
+            // System.out.println(x1+" "+y1+" --> "+x+" "+y);
+            for(int i=0;i<8;i++){
+                int nx = x+x_dir[i];
+                int ny = y+y_dir[i];
+                
+                if(nx >=0 && nx < n && ny >=0 && ny < m && !visited[nx][ny]){
+                    if(grid[nx][ny]=='1') q.add(new Pair(nx,ny));
+                    visited[nx][ny] = true;
+                }
+            }
+        }
+    }   
+}
+
+// Given a grid of size n*m (n is the number of rows and m is the number of columns in the grid) consisting of '0's (Water) and '1's(Land). 
+// Find the number of islands.
+
+// Note: An island is either surrounded by water or boundary of grid 
+// and is formed by connecting adjacent lands horizontally or vertically or diagonally i.e., in all 8 directions.
