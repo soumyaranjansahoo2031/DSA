@@ -23,12 +23,27 @@ class Solution {
             for(int j=0;j<m;j++){
                 if(grid[i][j]=='1' && !visited[i][j]){
                     visited[i][j]=true;
-                    bfs(grid,n,m,visited,i,j);
+                    // bfs(grid,n,m,visited,i,j);
+                    dfs(grid,n,m,visited,i,j);
                     ans++;
                 }
             }
         }
         return ans;
+    }
+    private void dfs(char[][] grid,int n,int m,boolean[][] visited,int x,int y){
+        int[] x_dir = new int[]{-1,-1,0,1,1,1,0,-1};
+        int[] y_dir = new int[]{0,1,1,1,0,-1,-1,-1};
+        
+        for(int i=0;i<8;i++){
+            int nx = x+x_dir[i];
+            int ny = y+y_dir[i];
+            
+            if(nx >=0 && nx < n && ny >=0 && ny < m && !visited[nx][ny] && grid[nx][ny]=='1'){
+                visited[nx][ny] = true;
+                dfs(grid,n,m,visited,nx,ny);
+            }
+        }
     }
     private void bfs(char[][] grid,int n,int m,boolean[][] visited,int x1,int y1){
         Queue<Pair> q = new LinkedList<>();
