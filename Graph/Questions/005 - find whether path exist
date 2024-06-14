@@ -1,0 +1,64 @@
+// https://www.geeksforgeeks.org/problems/find-whether-path-exist5238/1
+
+#graph #dfs
+
+class Solution
+{
+    //Function to find whether a path exists from the source to destination.
+    // boolean check = false;
+    public boolean is_Possible(int[][] grid)
+    {
+        // Code here
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean[][] visited = new boolean[n][m];
+        
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==1 && !visited[i][j]){
+                    visited[i][j]=true;
+                    // bfs(grid,n,m,visited,i,j);
+                    return dfs(grid,n,m,visited,i,j);
+                    // return check;
+                }
+            }
+        }
+        // return check;
+        return false;
+    }
+    private boolean dfs(int[][] grid,int n,int m,boolean[][] visited,int x,int y){
+        // System.out.println(x+" "+y);
+        int[] x_dir = new int[]{-1,0,1,0};
+        int[] y_dir = new int[]{0,1,0,-1};
+        
+        for(int i=0;i<4;i++){
+            int nx = x+x_dir[i];
+            int ny = y+y_dir[i];
+            
+            if(nx >=0 && nx < n && ny >=0 && ny < m && !visited[nx][ny] && grid[nx][ny]!=0){
+                visited[nx][ny] = true;
+                if(grid[nx][ny]==2){
+                    // check =true;
+                    // System.out.println(nx+" "+ny+" ----------------- "+check);
+                    return true;
+                }
+                if(dfs(grid,n,m,visited,nx,ny)) return true;
+                // System.out.println(nx+" "+ny+" "+check);
+                // if(check) return;
+            }
+        }
+        return false;
+    }
+}
+
+// Given a grid of size n*n filled with 0, 1, 2, 3. 
+// Check whether there is a path possible from the source to destination. 
+// You can traverse up, down, right and left.
+// The description of cells is as follows:
+
+// A value of cell 1 means Source.
+// A value of cell 2 means Destination.
+// A value of cell 3 means Blank cell.
+// A value of cell 0 means Wall.
+// Note: There are only a single source and a single destination.
