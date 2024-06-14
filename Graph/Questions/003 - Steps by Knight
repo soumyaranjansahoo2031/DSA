@@ -1,0 +1,59 @@
+// https://www.geeksforgeeks.org/batch/dsa-4/track/DSASP-Graph/problem/steps-by-knight5927
+
+#Graph #bfs
+
+class Solution
+{
+    private class Pair{
+        int i;
+        int j;
+        int step;
+        Pair(int i,int j,int step){
+            this.i = i;
+            this.j = j;
+            this.step = step;
+        }
+    }
+    //Function to find out minimum steps Knight needs to reach target position.
+    public int minStepToReachTarget(int knightPos[], int targetPos[], int n)
+    {
+        // Code here
+        Queue<Pair> q = new LinkedList<>();
+        boolean[][] visited = new boolean[n+1][n+1];
+        
+        int x1= knightPos[0],y1=knightPos[1];
+        int x2=targetPos[0],y2=targetPos[1];
+        if(x1==x2 && y1==y2) return 0;
+        
+        q.add(new Pair(x1,y1,0));
+        visited[x1][y1]=true;
+        
+        int[] x_dir = new int[]{-1,1,2,2,1,-1,-2,-2};
+        int[] y_dir = new int[]{2,2,1,-1,-2,-2,-1,1};
+        
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int x = p.i;
+            int y = p.j;
+            int step = p.step;
+            
+            for(int i=0;i<8;i++){
+                int nx = x + x_dir[i];
+                int ny = y + y_dir[i];
+                
+                if(nx >= 1 && nx <= n && ny >= 1 && ny <= n && !visited[nx][ny]){
+                    q.add(new Pair(nx,ny,step+1));
+                    visited[nx][ny]=true;
+                    if(nx==x2 && ny == y2) return step+1;
+                }
+            }
+        }
+        return -1;   
+    }   
+}
+
+// Given a square chessboard, the initial position of Knight and position of a target. 
+// Find out the minimum steps a Knight will take to reach the target position.
+
+// Note:
+// The initial and the target position coordinates of Knight have been given according to 1-base indexing.
