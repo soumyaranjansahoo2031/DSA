@@ -1,0 +1,53 @@
+// https://leetcode.com/problems/minimum-increment-to-make-array-unique/description/?envType=daily-question&envId=2024-06-14
+
+#Array #Greedy 
+
+class Solution {
+    public int minIncrementForUnique(int[] nums) {
+        int n = nums.length;
+        int arr[] = new int[200001];
+        for(int i=0;i<n;i++){
+            arr[nums[i]]++;
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]==0) q.add(i);
+        }
+        int count =0;
+        for(int i=0;i<arr.length;i++){
+            while(arr[i]-->1){
+                while(q.peek() < i) q.poll();
+                count += q.poll()-i;
+            }
+        }
+        return count;
+    }
+}
+
+// class Solution {
+//     public int minIncrementForUnique(int[] nums) {
+//         // Sort the array first
+//         Arrays.sort(nums);
+
+//         int numTracker = 0; // Tracks the next unique number that should be set.
+//         int minIncrement = 0; // Counts the total increments required.
+
+//         for (int num : nums) {
+//             numTracker = Math.max(numTracker, num);
+//             minIncrement += numTracker - num;
+//             numTracker += 1; // Increment the tracker for the next number.
+//         }
+
+//         return minIncrement;
+//     }
+// }
+
+// --------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------
+// You are given an integer array nums. 
+// In one move, you can pick an index i where 0 <= i < nums.
+// length and increment nums[i] by 1.
+
+// Return the minimum number of moves to make every value in nums unique.
+
+// The test cases are generated so that the answer fits in a 32-bit integer.
