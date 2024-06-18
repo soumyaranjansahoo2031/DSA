@@ -1,0 +1,105 @@
+// https://leetcode.com/problems/longest-common-subsequence/description/
+// #Medium
+// #DP 
+
+
+// Tabulation Approach
+// -----------------------------------------------------------------------------
+class Solution {
+    public int longestCommonSubsequence(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        int dp[][] = new int[m+1][n+1];
+        // for(int[] row : memo){ Arrays.fill(row,-1);}
+        // return lcs2(s1,s2,m,n,dp);
+        for(int i=0;i<=m;i++){
+            dp[i][0]=0;
+        }
+        for(int j=0;j<=n;j++){
+            dp[0][j]=0;
+        }
+        for(int i=1;i<=m;i++){
+            for(int j =1;j<=n;j++){
+                if(s1.charAt(i-1)==s2.charAt(j-1)) dp[i][j]= 1+dp[i-1][j-1];
+                else dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        // System.out.println(Arrays.deepToString(dp));
+        return dp[m][n];
+    }
+}
+
+// Memorization Approach 
+// --------------------------------------------------------------------------
+class Solution {
+    public int longestCommonSubsequence(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        int memo[][] = new int[m+1][n+1];
+        for(int[] row : memo){ Arrays.fill(row,-1);}
+        return lcs2(s1,s2,m,n,memo);
+    }
+    private static int lcs2(String s1,String s2,int m,int n,int[][] memo){
+        if(memo[m][n]!=-1) return memo[m][n];
+        
+        if(m==0 || n==0){
+            // return 0;
+            memo[m][n]=0;
+            return memo[m][n];
+        }
+        if(s1.charAt(m-1)==s2.charAt(n-1)){
+            // return 1+ lcs2(s1,s2,m-1,n-1);
+            memo[m][n]=1+lcs2(s1,s2,m-1,n-1,memo);
+        }
+        else{
+            int first = lcs2(s1,s2,m,n-1,memo);
+            int second = lcs2(s1,s2,m-1,n,memo);
+            // return Math.max(first,second);
+            memo[m][n]= Math.max(first,second);
+        }
+        return memo[m][n];
+    }
+}
+
+// Recursive Approach 
+// --------------------------------------------------------------------------
+class Solution {
+    public int longestCommonSubsequence(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        // int memo[][] = new int[m+1][n+1];
+        // for(int[] row : memo){ Arrays.fill(row,-1);}
+        // return lcs2(s1,s2,m,n,memo);
+        return lcs2(s1,s2,m,n);
+    }
+    private static int lcs2(String s1,String s2,int m,int n,int[][] memo){
+        // if(memo[m][n]!=-1) return memo[m][n];
+        
+        if(m==0 || n==0){
+             return 0;
+            // memo[m][n]=0;
+        }
+        if(s1.charAt(m-1)==s2.charAt(n-1)){
+            return 1+ lcs2(s1,s2,m-1,n-1);
+            // memo[m][n]=1+lcs2(s1,s2,m-1,n-1,memo);
+        }
+        else{
+            int first = lcs2(s1,s2,m,n-1,memo);
+            int second = lcs2(s1,s2,m-1,n,memo);
+            return Math.max(first,second);
+            // memo[m][n]= Math.max(first,second);
+        }
+        // return memo[m][n];
+    }
+}
+
+
+//Given two strings text1 and text2, 
+// return the length of their longest common subsequence.
+// If there is no common subsequence, return 0.
+
+// A subsequence of a string is a new string generated from the original string with some characters (can be none) 
+// deleted without changing the relative order of the remaining characters.
+
+// For example, "ace" is a subsequence of "abcde".
+// A common subsequence of two strings is a subsequence that is common to both strings.
