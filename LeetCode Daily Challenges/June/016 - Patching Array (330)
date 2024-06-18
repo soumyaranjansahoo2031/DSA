@@ -1,0 +1,79 @@
+// https://leetcode.com/problems/patching-array/description/?envType=daily-question&envId=2024-06-16
+// #Hard 
+// #Math #Greedy
+// 
+
+
+class Solution {
+    public int minPatches(int[] nums, int n) {
+        long miss = 1;
+        int patches = 0;
+        int i = 0;
+
+        while (miss <= n) {
+            if (i < nums.length && nums[i] <= miss) {
+                miss += nums[i];
+                i++;
+            } else {
+                miss += miss;
+                patches++;
+            }
+        }
+        
+        return patches;
+    }
+}
+
+
+
+
+// class Solution {
+//     public int minPatches(int[] nums, int n) {
+//         HashSet<Integer> visited_set = new HashSet<>();
+//         HashSet<Integer> non_visited_set = new HashSet<>();
+//         for(int i=1;i<=n;i++){
+//             non_visited_set.add(i);
+//         }
+//         for(int i=0;i<n;i++){
+//             non_visited_set.remove(nums[i]);
+//             visited_set.add(nums[i]);
+//             for(int x : visited_set){
+//                 if(x!=nums[i]){
+//                     if(!visited_set.contains(x+nums[i])){
+//                         non_visited_set.remove(x+nums[i]);
+//                         visited_set.add(x+nums[i]);
+//                     }
+//                 }
+//             }
+//         }
+//         int count = 0;
+//         while(non_visited_set.size()!=0){
+//             for(int y:non_visited_set){
+//                 if(!visited_set.contains(y)){
+//                     count++;
+//                     non_visited_set.remove(y);
+//                     visited_set.add(y);
+
+//                     for(int x : visited_set){
+//                         if(x!=y){
+//                             if(!visited_set.contains(x+y)){
+//                                 non_visited_set.remove(x+y);
+//                                 visited_set.add(x+y);
+//                             }
+//                         }
+//                     }
+
+//                 }
+//             }
+//         }
+//         return count;
+//     }
+// }
+
+
+// Given a sorted integer array nums and an integer n,
+//  add/patch elements to the array such that 
+//  any number in the range [1, n] inclusive 
+//  can be formed by the sum of some elements in the array.
+
+// Return the minimum number of patches required.
