@@ -1,0 +1,19 @@
+// https://leetcode.com/problems/sum-of-square-numbers/?envType=daily-question&envId=2024-06-17
+// #Medium
+// #Math #BinarySearch
+
+class Solution {
+    public boolean judgeSquareSum(int c) {
+        for(int i=0;i*i<=c/2;i++){
+            int x = i*i;
+            int y = c-x;
+            int sqrt =(int) Math.sqrt(y);
+            if(sqrt*sqrt==y) return true;
+        }
+        return false;
+    }
+}
+
+// Given a non-negative integer c,
+//  decide whether there are two integers a and b
+//   such that a2 + b2 = c.
