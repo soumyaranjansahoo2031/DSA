@@ -1,0 +1,53 @@
+// https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
+// # Medium
+// # BinarySearch
+
+class Solution {
+    public int minDays(int[] bloomDay, int m, int k) {
+        int n = bloomDay.length;
+        if((long)n < (long)m*(long)k) return -1;
+
+        int maxi = 0;
+        for(int i=0;i<n;i++){
+            maxi = Math.max(bloomDay[i],maxi);
+        }
+
+        // binary search
+        int l =1;
+        int r = maxi;
+        while(l<r){
+            int mid = (l+r)/2;
+            if(check(mid,bloomDay,m,k)) r=mid;
+            else l=mid+1;
+        }
+        return r;
+    }
+    private boolean check (int mid,int[] nums,int m,int k){
+        // if in mid days , is it possible to bloom m pairs of flowers ( each pair having k flowers)
+        int m_count = 0,k_count=0;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]<=mid){
+                k_count++;
+                if(k_count == k){
+                    k_count =0;m_count++;
+                }
+            }
+            else k_count=0;
+        }
+        return m_count >= m ;
+    }
+}
+
+
+
+// You are given an integer array bloomDay, an integer m and an integer k.
+
+// You want to make m bouquets. 
+// To make a bouquet, you need to use k adjacent flowers from the garden.
+
+// The garden consists of n flowers, 
+// the ith flower will bloom in the bloomDay[i] and then can be used in exactly one bouquet.
+
+// Return the minimum number of days 
+// you need to wait to be able to make m bouquets from the garden. 
+// If it is impossible to make m bouquets return -1.
