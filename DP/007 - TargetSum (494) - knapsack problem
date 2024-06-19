@@ -1,0 +1,22 @@
+// https://leetcode.com/problems/target-sum/
+// # Medium
+// # Dp   
+// # 0/1 Knapsack
+
+// Recursive Approach
+// -------------------------------------------
+class Solution {
+    public int findTargetSumWays(int[] nums, int target) {
+        return fun(nums,target,nums.length-1,0);
+    }
+    private int fun(int[] nums,int target,int index,int curr){
+        if(index < 0){
+            if(curr==target) return 1;
+            else return 0;
+        }
+        int pos = fun(nums,target,index-1,curr+nums[index]);
+        int neg = fun(nums,target,index-1,curr-nums[index]);
+
+        return pos + neg;
+    }
+}
