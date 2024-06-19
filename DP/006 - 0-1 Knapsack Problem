@@ -1,0 +1,57 @@
+// https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1
+// # Medium
+// # DP
+
+// Recursive Approach 
+// ------------------------------------------------------------
+class Solution 
+{ 
+    //Function to return max value that can be put in knapsack of capacity W.
+    static int knapSack(int W, int wt[], int val[], int n) 
+    { 
+         // your code here 
+        return fun(wt,val,n-1,W);
+    } 
+    private static int fun(int[] wt,int val[],int index,int W){
+        if(index < 0) return 0;
+        int not_take = fun(wt,val,index-1,W);
+        int take = 0;
+        if(wt[index] <= W){
+            take = fun(wt,val,index-1,W-wt[index])+val[index];
+        }
+        return Math.max(not_take,take);
+    }
+}
+// -----------------------------------------------------------------------
+
+// Tabulation Approach 
+// ---------------------------------------------------------------------
+class Solution 
+{ 
+    //Function to return max value that can be put in knapsack of capacity W.
+    static int knapSack(int W, int wt[], int val[], int n) 
+    { 
+         // your code here 
+        // return fun(wt,val,n-1,W);
+        int[][] dp = new int[n+1][W+1];
+        for(int i = 0; i <= n; i++){
+            for(int j = 0; j <= W; j++){
+                if(i == 0 || j == 0){
+                    dp[i][j] = 0; // Base case initialization
+                } else if(wt[i-1] > j){
+                    dp[i][j] = dp[i-1][j];
+                } else {
+                    dp[i][j] = Math.max(dp[i-1][j], val[i-1] + dp[i-1][j - wt[i-1]]);
+                }
+            }
+        }
+        return dp[n][W];
+    } 
+}
+
+// N = 3
+// W = 4
+// values[] = {1,2,3}
+// weight[] = {4,5,1}
+// Output: 3
+// Explanation: Choose the last item that weighs 1 unit and holds a value of 3
