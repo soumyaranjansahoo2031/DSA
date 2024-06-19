@@ -33,3 +33,36 @@ class Solution
 
 // Memorization Approach
 // -----------------------------------------------------------
+class Solution
+{
+    //Function to find the maximum number of cuts.
+    public int maximizeCuts(int n, int x, int y, int z)
+    {
+       //Your code here
+       int memo[] = new int[n+1];
+       Arrays.fill(memo,-2);
+       int ans = fun(n,x,y,z,memo);
+       return ans == -1 ? 0 : ans;
+       
+    }
+    private int fun(int n,int x,int y,int z,int[] memo){
+        if(n<0) return -1;
+        if(n==0) return 0;
+
+        if(memo[n]!=-2) return memo[n];
+        
+        int op1 = fun(n-x,x,y,z,memo);
+        int op2 = fun(n-y,x,y,z,memo);
+        int op3 = fun(n-z,x,y,z,memo);
+        
+        int res = Math.max(op1, Math.max(op2,op3));
+        
+        if(res==-1) return memo[n]=res;
+        else return memo[n]=1+res;
+        
+    }
+}
+// -------------------------------------------------------------------
+
+// Tabulation Approach 
+// --------------------------------------------------------------------
