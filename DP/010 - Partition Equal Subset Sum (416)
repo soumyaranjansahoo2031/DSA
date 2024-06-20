@@ -48,3 +48,35 @@ class Solution {
         return  memo[n][sum] = take + not_take;
     }
 }
+
+
+// Tabulation Approach
+---------------------------------------------------------------------------------
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int n = nums.length;
+        int sum =0;
+        for(int i=0;i<n;i++){
+            sum += nums[i];
+        }
+        if(sum%2!=0) return false;
+
+        int target = sum/2;
+        int[][] dp = new int[n+1][target+1];
+        // for(int[] row : dp) {Arrays.fill(row,-1);}
+
+        dp[0][0]=1;
+        for(int i=1;i<=n;i++){
+            for(int j=0;j<=target;j++){
+                if(dp[i-1][j]==1){
+                    dp[i][j]=1;
+                    if(j+nums[i-1]<=target) dp[i][j+nums[i-1]]=1;
+                }
+            }
+        }
+        // System.out.println(Arrays.deepToString(dp));
+        return dp[n][target]!=0;
+
+        // return isSubsetSum(nums,n,sum/2,memo)!=0;
+    }
+}
