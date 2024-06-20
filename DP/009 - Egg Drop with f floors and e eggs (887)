@@ -1,0 +1,87 @@
+// https://leetcode.com/problems/super-egg-drop/description/
+// # Hard
+// # DP
+
+// Recursive Approach 
+// ----------------------------------------------------
+class Solution {
+    public int superEggDrop(int k, int n) {
+        // k eggs & n floors
+        return rec(k,n);
+    }
+    private int rec(int e,int f){
+        
+        // base case --------
+        if(e==1) return f;
+        if(f==1 || f==0) return f;
+
+        // logic ------------
+        int ans =f;
+        for(int x=1;x<=f;x++){
+            int breaking = rec(e-1,x-1);
+            int not_break = rec(e,f-x);
+            int curr = Math.max(breaking,not_break)+1;
+            ans = Math.min(ans,curr);
+        }
+        return ans;
+    }
+}
+
+// Memorization Approach
+// ---------------------------------------------------------
+class Solution {
+    public int superEggDrop(int k, int n) {
+        // k eggs & n floors
+
+        int memo[][] = new int[k+1][n+1];
+        for(int[] row:memo) {Arrays.fill(row,-1);}
+
+        return rec(k,n,memo);
+    }
+    private int rec(int e,int f,int[][] memo){
+
+        if(memo[e][f]!=-1) return memo[e][f];
+        
+        // base case --------
+        if(e==1) return f;
+        if(f==1 || f==0) return f;
+
+        // logic ------------
+        int ans =f;
+        for(int x=1;x<=f;x++){
+            int breaking = rec(e-1,x-1,memo);
+            int not_break = rec(e,f-x,memo);
+            int curr = Math.max(breaking,not_break)+1;
+            ans = Math.min(ans,curr);
+        }
+        // return ans;
+        return memo[e][f]=ans;
+    }
+}
+
+// Tabulation Approach
+// -------------------------------------------------------------
+class Solution {
+    public int superEggDrop(int e, int f) {
+        // e eggs & f floors
+
+        int dp[][] = new int[e+1][f+1];
+        // for(int[] row:dp) {Arrays.fill(row,-1);}
+
+        for(int i=1;i<=e;i++){
+            for(int j=0;j<=f;j++){
+                if(i==1) dp[i][j]=j;
+                else if(j<=2) dp[i][j]=j;
+                else {
+                    dp[i][j]=Integer.MAX_VALUE;
+                    for(int x=1;x<=j;x++){
+                        dp[i][j]=Math.min(dp[i][j],Math.max(dp[i-1][x-1],dp[i][j-x])+1);
+                    }
+                }
+                // System.out.println(Arrays.deepToString(dp));
+            }
+        }
+        return dp[e][f];
+        // return rec(e,f,dp);
+    }
+}
