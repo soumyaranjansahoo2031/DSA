@@ -1,0 +1,40 @@
+// https://leetcode.com/problems/grumpy-bookstore-owner/?envType=daily-question&envId=2024-06-21
+// # Medium
+// # Sliding Window 
+
+
+class Solution {
+    public int maxSatisfied(int[] c, int[] g, int min) {
+        int sum1 = 0;
+        int n = c.length;
+
+        for(int i=0;i<n;i++){
+            if(g[i]==0){
+                sum1+=c[i];
+                c[i]=0;
+            }
+        }
+        int sum2=0;
+        for(int i=0;i<min;i++){
+            sum2+=c[i];
+        }
+        System.out.println(sum2);
+        int ans = sum2;
+        for(int j=min;j<n;j++){
+            sum2 += c[j]-c[j-min];
+            if(sum2 > ans) ans = sum2;
+            // System.out.println(sum2+" "+ans);
+        }
+        return sum1+ans;
+    }
+}
+
+// ======================================================================
+
+
+// Example 1:
+
+// Input: customers = [1,0,1,2,1,1,7,5], grumpy = [0,1,0,1,0,1,0,1], minutes = 3
+// Output: 16
+// Explanation: The bookstore owner keeps themselves not grumpy for the last 3 minutes. 
+// The maximum number of customers that can be satisfied = 1 + 1 + 1 + 1 + 7 + 5 = 16.
