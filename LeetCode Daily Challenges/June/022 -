@@ -1,0 +1,73 @@
+// https://leetcode.com/problems/count-number-of-nice-subarrays/
+// # Medium
+// # Sliding Window   # HashTable
+
+// Optimised Method : T.C - O(n)
+//=================================================================
+class Solution {
+    public int numberOfSubarrays(int[] nums, int k) { 
+        int n = nums.length;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        HashMap<Integer,Integer> map2 = new HashMap<>();
+        int count =0;
+        map.put(0,0);
+        for(int i=0;i<n;i++){
+            if(nums[i]%2==1){
+                count++;
+                map2.put(count,i);
+            }
+            map.put(i+1,count);
+        }
+        int ans = 0;
+        for(int i=0;i<n;i++){
+            int curr = map.get(i);
+            int want = curr+k;
+            if(map2.containsKey(want)){
+                int start = map2.get(want);
+                int end = map2.getOrDefault(want+1,n);
+                ans += end - start;
+            }
+            else break;
+        }
+        return ans;
+    }
+}
+
+
+// Naive Method : T.C - O(n^2)
+//==========================================================================
+// class Solution {
+//     public int numberOfSubarrays(int[] nums, int k) { 
+//         int n = nums.length;
+//         int ans = 0;
+//         for(int i=0;i<n;i++){
+//             int count = 0;
+//             for(int j=i;j<n;j++){
+//                 if(nums[j]%2==1) count++;
+//                 if(count==k){
+//                     ans++;
+//                 }
+//                 if(count == k+1) break;
+//             }
+//         }
+//         return ans;
+//     }
+// }
+
+//=====================================================================================
+
+
+// Example 1:
+
+// Input: nums = [1,1,2,1,1], k = 3
+// Output: 2
+// Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+// Example 2:
+
+// Input: nums = [2,4,6], k = 1
+// Output: 0
+// Explanation: There are no odd numbers in the array.
+// Example 3:
+
+// Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+// Output: 16
