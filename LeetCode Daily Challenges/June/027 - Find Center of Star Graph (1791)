@@ -1,0 +1,25 @@
+// https://leetcode.com/problems/find-center-of-star-graph/description/?envType=daily-question&envId=2024-06-27
+// #Easy
+// #Graph
+
+class Solution {
+    public int findCenter(int[][] edges) {
+        return common(edges[0],edges[1]);
+    }
+    private int common(int[] a,int[] b){
+        return a[0]==b[0]?a[0]:(a[0]==b[1]?a[0]:a[1]);
+    }
+}
+
+--------------------------------------------------------------------------
+Example 1:
+
+Input: edges = [[1,2],[2,3],[4,2]]
+Output: 2
+Explanation: As shown in the figure above, node 2 is connected to every other node, so 2 is the center.
+
+
+Example 2:
+
+Input: edges = [[1,2],[5,1],[1,3],[1,4]]
+Output: 1
