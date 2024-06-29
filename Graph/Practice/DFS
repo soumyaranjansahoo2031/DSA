@@ -24,17 +24,17 @@ public class BFS {
 		dfs_dis(adj,v);
 	}
 	private static void dfs_dis(ArrayList<ArrayList<Integer>> adj , int v){
-		boolean visited[v];
+		boolean visited=new boolean[v];
 		for(int i=0;i<v;i++){
 			if(visited[i]==false) dfs(adj,i,visited);
 		}
 	}
-	private static void dfs(ArrayList<ArrayList<Integer>> adj, int v, int s) {
-	  visited[s]=true;
-    System.out.print( s + " " );
-    for( int u : adj.get(s) ){
-      if(!visited[s]) dfs(adj,u,visited);
-    }
+	private static void dfs(ArrayList<ArrayList<Integer>> adj, int s , boolean[] visited) {
+	    visited[s]=true;
+	    System.out.print( s + " " );
+	    for( int u : adj.get(s) ){
+	      if(!visited[u]) dfs(adj,u,visited);
+	    }
 	}
 	private static void printGraph(ArrayList<ArrayList<Integer>> adj) {
 		for(int i=0;i<adj.size();i++) {
