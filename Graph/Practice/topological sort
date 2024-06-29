@@ -1,0 +1,34 @@
+// https://www.geeksforgeeks.org/problems/topological-sort/1
+// 
+
+
+class Solution
+{
+    //Function to return list containing vertices in Topological order. 
+    static int[] topoSort(int v, ArrayList<ArrayList<Integer>> adj) 
+    {
+        // add your code here
+        Stack<Integer> st = new Stack<>();
+        dfs_dis(adj,v,st);
+        
+        int ans[] = new int[v];int i=0;
+        while(st.size()!=0){
+            ans[i++]=st.pop();
+        }
+        return ans;
+    }
+    private static void dfs_dis(ArrayList<ArrayList<Integer>> adj , int v,Stack<Integer> st){
+  		boolean[] visited=new boolean[v];
+  		for(int i=0;i<v;i++){
+  			if(visited[i]==false) dfs(adj,i,visited,st);
+  		}
+  	}
+  	private static void dfs(ArrayList<ArrayList<Integer>> adj, int s,boolean[] visited,Stack<Integer> st) {
+  	    visited[s]=true;
+  	   // System.out.print( s + " " );
+  	    for( int u : adj.get(s) ){
+  	        if(!visited[u]) dfs(adj,u,visited,st);
+  	    }
+  	    st.push(s);
+  	}
+}
