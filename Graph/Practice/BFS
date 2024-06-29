@@ -20,7 +20,14 @@ public class BFS {
 		addEdge(adj,1,2);
 		addEdge(adj,2,3);
 		printGraph(adj);
-		bfs(adj,v,0);
+		// bfs(adj,v,0);
+		bfs_dis(adj,v);
+	}
+	private static void bfs_dis(ArrayList<ArrayList<Integer>> adj , int v){
+		boolean visited[v];
+		for(int i=0;i<v;i++){
+			if(visited[i]==false) bfs2(adj,i,visited);
+		}
 	}
 	private static void bfs(ArrayList<ArrayList<Integer>> adj, int v, int s) {
 		boolean visited[] = new boolean[v+1];
@@ -33,7 +40,22 @@ public class BFS {
 			for(int x : adj.get(ele)) {
 				if(visited[x]!=true) {
 					q.add(x);
-//					visited[x]=true;
+					visited[x]=true;
+				}
+			}
+		}
+	}
+	private static void bfs2(ArrayList<ArrayList<Integer>> adj, int s,boolean visited[]) {
+		Queue<Integer> q = new LinkedList<>();
+		q.add(s);
+		visited[s]=true;
+		while(!q.isEmpty()) {
+			int ele = q.poll();
+			System.out.print(ele+" ");
+			for(int x : adj.get(ele)) {
+				if(visited[x]!=true) {
+					q.add(x);
+					visited[x]=true;
 				}
 			}
 		}
