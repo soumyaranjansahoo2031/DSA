@@ -1,0 +1,81 @@
+// https://leetcode.com/problems/reverse-pairs/description/
+// # Hard
+// # Merge Sort  # Binary search
+
+
+
+class Solution {
+    int count = 0;
+    public int reversePairs(int[] nums) {
+        mergeSort(nums,0,nums.length-1);
+        return count;
+    }
+    int check(int[] arr,int l,int m,int r){
+        int i = l;
+        int j = m+1;
+        int step_count = 0;
+        while(i<=m && j<=r){
+            if((long)arr[i] > 2*(long)arr[j]) j++;
+            else if((long)arr[i] <= 2*(long)arr[j]){
+                step_count += j-(m+1);
+                i++;
+            }
+        }
+        if(j==r+1) step_count += (r-m)*(m+1-i);
+        return step_count;
+    }
+    void merge(int arr[], int l, int m, int r)
+    {
+         // Your code here
+
+        count += check(arr,l,m,r); // this is the change
+
+
+        int n1 = m-l+1;
+        int n2 = r-m;
+        int left[] = new int[n1];
+        int right[] = new int[n2];
+        for(int i=0;i<n1;i++){
+            left[i]=arr[l+i];
+        }
+        for(int j=0;j<n2;j++){
+            right[j]=arr[m+1+j];
+        }
+        int i=0,j=0,k=l;
+        while(i<n1 && j<n2){
+            if(left[i]<=right[j]){
+                arr[k]=left[i]; i++;
+            }
+            else{
+                arr[k]=right[j]; j++;
+            }
+            k++;
+        }
+        while(i<n1) { arr[k]=left[i]; k++;i++;}
+        while(j<n2) { arr[k]=right[j]; k++;j++;}
+        
+    }
+    void mergeSort(int arr[], int l, int r)
+    {
+        //code here
+        if(l==r) return ;
+        int m = (l+r)/2;
+        mergeSort(arr,l,m);
+        mergeSort(arr,m+1,r);
+        merge(arr,l,m,r);
+    }
+}
+
+
+// class Solution {
+//     public int reversePairs(int[] nums) {
+//         int count =0;
+//         int n = nums.length;
+//         for(int j=n-1;j>=0;j--){
+//             for(int i=0;i<j;i++){
+//                 if((long)nums[i] > 2*(long)nums[j]) count++;
+//             }
+//         }
+//         return count;
+//     }
+//  }
