@@ -1,0 +1,117 @@
+// https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/?envType=daily-question&envId=2024-06-30
+// # Hard
+// # Graph  # Disjoint Set Union ( DSU )  
+// ## Google
+
+class DSU{
+    int[] parent;
+    int components;
+    int[] rank;
+    
+    DSU(int n){
+        this.parent = new int[n+1];
+        this.components = n;
+        this.rank = new int[n+1];
+
+        for(int i=1;i<=n;i++){
+            parent[i]=i;
+        }
+    }
+
+    int find(int x){
+        if(x==parent[x]) return x;
+        return parent[x]=find(parent[x]);
+    }
+    void union(int x,int y){
+        int x_p = find(x);
+        int y_p = find(y);
+        if(x_p==y_p) return;
+        else{
+            if(rank[x_p] > rank[y_p]) parent[y_p]=x_p;
+            else if(rank[x_p] < rank[y_p] ) parent[x_p]=y_p;
+            else{
+                parent[y_p]=x_p;
+                rank[x_p]++;
+            }
+            components--;
+        }
+    }
+}
+class Solution {
+    public int maxNumEdgesToRemove(int n, int[][] edges) {
+        DSU Alice = new DSU(n);
+        DSU Bob=new DSU(n);
+
+        int edge_count = 0;
+        for(int[] edge : edges){
+            int type = edge[0];
+            int u = edge[1];
+            int v = edge[2];
+            if(type==3){
+                boolean add_edge = false;
+                if(Alice.find(u)!=Alice.find(v)){
+                    Alice.union(u,v);
+                    add_edge = true;
+                }
+                if(Bob.find(u)!=Bob.find(v)){
+                    Bob.union(u,v);
+                    add_edge = true;
+                }
+                if(add_edge == true) edge_count++;
+            }
+        }
+        for(int[] edge : edges){
+            int type = edge[0];
+            int u = edge[1];
+            int v = edge[2];
+            if(type==1){
+                if(Alice.find(u)!=Alice.find(v)){
+                    Alice.union(u,v);
+                    edge_count++;
+                }
+            }
+            else if(type==2){
+                if(Bob.find(u)!=Bob.find(v)){
+                    Bob.union(u,v);
+                    edge_count++;
+                }
+            }
+        }
+        if(Alice.components==1 && Bob.components==1){
+            return edges.length - edge_count;
+        }
+        return -1;
+    }
+}
+
+
+===============================================================================================================================================================================================
+
+// Example 1:
+
+// Input: n = 4, edges = [[3,1,2],[3,2,3],[1,1,3],[1,2,4],[1,1,2],[2,3,4]]
+// Output: 2
+// Explanation: If we remove the 2 edges [1,1,2] and [1,1,3]. The graph will still be fully traversable by Alice and Bob. Removing any additional edge will not make it so. So the maximum number of edges we can remove is 2.
+
+
+// Example 2:
+
+// Input: n = 4, edges = [[3,1,2],[3,2,3],[1,1,4],[2,1,4]]
+// Output: 0
+// Explanation: Notice that removing any edge will not make the graph fully traversable by Alice and Bob.
+
+
+// Example 3:
+
+// Input: n = 4, edges = [[3,2,3],[1,1,2],[2,3,4]]
+// Output: -1
+// Explanation: In the current graph, Alice cannot reach node 4 from the other nodes. Likewise, Bob cannot reach 1. Therefore it's impossible to make the graph fully traversable.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Constraints:
+
+// 1 <= n <= 105
+// 1 <= edges.length <= min(105, 3 * n * (n - 1) / 2)
+// edges[i].length == 3
+// 1 <= typei <= 3
+// 1 <= ui < vi <= n
+// All tuples (typei, ui, vi) are distinct.
