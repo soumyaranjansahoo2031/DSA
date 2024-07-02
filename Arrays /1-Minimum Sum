@@ -1,6 +1,7 @@
 // https://www.geeksforgeeks.org/problems/minimum-sum4058/1
-// #Google
+// # Medium
 // Arrays // Sorting // String
+// ##Google
 
 class Solution {
     String solve(int[] arr, int n) {
