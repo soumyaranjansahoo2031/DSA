@@ -1,0 +1,34 @@
+// https://leetcode.com/problems/generate-parentheses/description/
+// https://www.geeksforgeeks.org/problems/generate-all-possible-parentheses/1
+// # Medium
+// # Recursion  # Backtracking  # Stack
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> li = new ArrayList<>();
+        generate2 (li,"",n,0,0);
+        return li;
+    }
+    private void generate2(List<String> li,String current,int max,int open,int close){
+        if(current.length() == 2*max){
+            li.add(current);
+            return ;
+        }
+        if(open < max) generate2(li,current+"(",max,open+1,close);
+        if(close < open) generate2(li,current+")",max,open,close+1);
+    }
+}
+
+// ======================================================================================
+
+
+// Example 1:
+
+// Input: n = 3
+// Output: ["((()))","(()())","(())()","()(())","()()()"]
+
+
+// Example 2:
+
+// Input: n = 1
+// Output: ["()"]
