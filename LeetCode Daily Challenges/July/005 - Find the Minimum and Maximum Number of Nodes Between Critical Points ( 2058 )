@@ -1,0 +1,60 @@
+// https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/description/
+// # Medium
+// # LinkedList
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public int[] nodesBetweenCriticalPoints(ListNode head) {
+        int mini = Integer.MAX_VALUE;
+        int maxi = Integer.MIN_VALUE;
+
+        int index = 1;
+        int previous = -1;
+        int start = -1;
+
+        ListNode prev = head;
+        ListNode curr = head.next;
+
+        while(curr.next != null){
+            if(prev.val < curr.val && curr.val > curr.next.val){
+                if(start == -1){
+                    start = index;
+                    previous = index;
+                }
+                else{
+                    mini = Math.min(mini,index - previous);
+                    maxi = Math.max(mini,index - start);
+                    previous = index;
+                }
+            }
+            if(prev.val > curr.val && curr.val < curr.next.val){
+                if(start == -1){
+                    start = index;
+                    previous = index;
+                }
+                else{
+                    mini = Math.min(mini,index - previous);
+                    maxi = Math.max(mini,index - start);
+                    previous = index;
+                }
+            }
+            curr = curr.next;
+            prev = prev.next;
+            if(curr.next == null){
+                if(start != -1 && start != previous) return new int[]{mini,maxi};
+            }
+            index++;
+        }
+        return new int[]{-1,-1};
+
+    }
+}
