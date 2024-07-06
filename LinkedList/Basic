@@ -1,0 +1,117 @@
+// https://leetcode.com/problems/design-linked-list/
+// #Medium
+
+class MyLinkedList {
+    public static class Node{
+        int data;
+        Node next;
+        Node(int data){
+            this.data = data;
+            this.next = null;
+        }
+    }
+    Node head = null;
+    Node tail = null;
+    int current_size = 0;
+    public MyLinkedList() {
+    }
+    public Node getNodeAtIndex(int index){
+        if(index < 0 || index >= current_size) return null;
+        Node temp = head;
+        for(int i=0;i<index;i++){
+            temp = temp.next;
+        }
+        return temp;
+    }
+    public int get(int index) {
+        if(index < 0 || index >= current_size) return -1;
+        Node temp = head;
+        for(int i=0;i<index;i++){
+            temp = temp.next;
+        }
+        return temp.data;
+    }
+    
+    public void addAtHead(int val) {
+        Node temp = new Node(val);
+        temp.next = head;
+        head = temp;
+        if(current_size == 0){ 
+            tail = head; 
+        }
+        current_size++;
+        // print(head);
+    }
+    
+    public void addAtTail(int val) {
+        Node temp = new Node(val);
+        if(current_size == 0){ 
+            head = temp; 
+            tail = temp;
+        }
+        else{
+            tail.next = temp;
+            tail = temp;
+        }
+        current_size++;
+    }
+    
+    public void addAtIndex(int index, int val) {
+        if(index < 0 || index > current_size) return;
+        if(index == 0) addAtHead(val);
+        else if(index == current_size) addAtTail(val);
+        else{
+            Node newNode = new Node (val);
+            Node temp = head;
+            for(int i=0;i<index-1;i++){
+                temp = temp.next;
+            }
+            newNode.next = temp.next;
+            temp.next = newNode;
+            current_size++;
+        }
+        // System.out.println("index");
+        // print(head);
+    }
+    
+    public void deleteAtIndex(int index) {
+        if(index < 0 || index >= current_size) return;
+        if(current_size == 1){
+            head = null;
+            tail = null;
+        }
+        else if(index == 0){
+            head = head.next;
+        }
+        else {
+            Node prev = getNodeAtIndex (index - 1);
+            if(index == current_size -1){
+                tail = prev;
+                tail.next = null;
+            }
+            else{
+                prev.next = prev.next.next;
+            }
+        }
+        current_size--;
+    }
+    void print(Node head){
+        if(head==null) return ;
+        Node temp = head;
+        for(int i=0;i<current_size;i++){
+            System.out.print(temp.data+"->");
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+}
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList obj = new MyLinkedList();
+ * int param_1 = obj.get(index);
+ * obj.addAtHead(val);
+ * obj.addAtTail(val);
+ * obj.addAtIndex(index,val);
+ * obj.deleteAtIndex(index);
+ */
