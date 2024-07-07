@@ -1,0 +1,22 @@
+// https://leetcode.com/problems/water-bottles/
+// # Easy
+// # Math
+
+
+class Solution {
+    public int numWaterBottles(int numBottles, int numExchange) {
+        int ans = 0;
+        int rem = numBottles;
+        int empty = 0;
+        while(rem > 0){
+            // System.out.println(ans  + " "+rem+" "+empty);
+            ans += rem;
+            // rem -= numBottles
+            int total = rem+empty;
+            rem = total/ numExchange ;
+            empty =total% numExchange;
+            // System.out.println(ans  + " "+rem+" "+empty);
+        }
+        return ans;
+    }
+}
