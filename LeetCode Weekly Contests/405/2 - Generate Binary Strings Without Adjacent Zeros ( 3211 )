@@ -1,0 +1,19 @@
+// https://leetcode.com/problems/generate-binary-strings-without-adjacent-zeros/description/
+// # Medium
+// # String  # Matrix  # Recursion
+
+class Solution {
+    public List<String> validStrings(int n) {
+        List<String> li = new ArrayList<>();
+        fun(li,"",0,n);
+        return li;
+    }
+    public void fun(List<String> li,String s,int index,int n){
+        if(index == n){
+            li.add(s);
+            return ;
+        }
+        if(s=="" || s.charAt(s.length()-1)!='0') fun(li,s+"0",index+1,n);
+        fun(li,s+"1",index+1,n);
+    }
+}
