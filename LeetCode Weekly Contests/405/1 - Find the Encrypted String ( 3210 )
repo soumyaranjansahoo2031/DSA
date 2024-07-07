@@ -1,0 +1,12 @@
+// https://leetcode.com/problems/find-the-encrypted-string/
+// # Easy
+// # String
+
+class Solution {
+    public String getEncryptedString(String s, int k) {
+        int n = s.length();
+        int rotate = k % n;
+        
+        return s.substring(rotate)+s.substring(0,rotate);
+    }
+}
