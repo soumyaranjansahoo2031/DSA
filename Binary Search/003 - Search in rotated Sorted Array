@@ -1,0 +1,66 @@
+// https://www.geeksforgeeks.org/problems/search-in-a-rotated-array4618/1
+// # Medium
+// # Binary Search  
+
+class Solution {
+    int search(int[] arr, int key) {
+        // Complete this function
+        int pivot = findPivot2(arr);
+        // System.out.println("pivot "+pivot);
+        int l_index = findIndex(arr,0,pivot-1,key);
+        int r_index = findIndex(arr,pivot,arr.length-1,key);
+        
+        if(l_index != -1) return l_index;
+        if(r_index != -1) return r_index;
+        
+        return -1;
+    }
+    int findIndex(int[] arr , int start , int end, int key){
+        int l = start;
+        int r = end;
+        while(l<=r){
+            int mid = (l+r)/2;
+            if(arr[mid] > key) r--;
+            else if(arr[mid] < key) l++;
+            else return mid;
+        }
+        return -1 ;
+    }
+    // int findPivot(int[] arr){
+    //     for(int i=1;i<arr.length;i++){
+    //         if(arr[i] < arr[i-1]) return i;
+    //     }
+    //     return arr.length;
+    // }
+    int findPivot2(int[] arr){
+        int l = 0;
+        int r = arr.length-1;
+        while(l<r){
+            int mid = (l+r)/2;
+            if(arr[mid] >= arr[0]) l=mid+1;
+            else if(arr[mid] < arr[0]) r = mid;
+            // System.out.println(l+" "+r);
+        }
+        return r;
+    }
+}
+
+// ==================================================================================
+
+// Examples :
+
+// Input: arr[] = [5, 6, 7, 8, 9, 10, 1, 2, 3], key = 10
+// Output: 5
+// Explanation: 10 is found at index 5.
+
+// Input: arr[] = [3, 5, 1, 2], key = 6
+// Output: -1
+// Explanation: There is no element that has value 6.
+
+// Expected Time Complexity: O(log n)
+// Expected Auxiliary Space: O(1)
+
+// Constraints:
+// 1 ≤ arr.size() ≤ 106
+// 0 ≤ arr[i] ≤ 106
+// 1 ≤ key ≤ 105
