@@ -1,0 +1,23 @@
+// https://leetcode.com/problems/average-waiting-time/
+// # Medium
+// # Array
+
+class Solution {
+    public double averageWaitingTime(int[][] orders) {
+        int n = orders.length;
+        double wait = 0;  
+//      long wait  = 0;
+//      int wait = 0;
+        int curr = 0;
+        for(int[] order : orders){
+            int arrival = order[0];
+            int time = order[1];
+
+            int start = Math.max(curr,arrival);
+            wait += (start + time)-arrival;
+            curr = start + time;
+        }
+        return wait/n;
+//      return (double) wait / n;
+    }
+}
