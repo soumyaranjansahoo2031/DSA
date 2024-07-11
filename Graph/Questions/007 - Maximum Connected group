@@ -1,0 +1,89 @@
+// https://www.geeksforgeeks.org/problems/maximum-connected-group/1
+// # Medium
+// #Graph  #DFS 
+
+class Solution {
+    int x_dir[] ={-1,0,1,0};
+    int y_dir[] ={0,-1,0,1};
+
+    public int MaxConnection(int grid[][]) {
+        // Your code here
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        int num = 0;                                      // little change
+        int[][] group = new int[n][m];                    // little change
+        HashMap<Integer,Integer> map = new HashMap<>();   // little change
+        
+        
+        boolean[][] visited = new boolean[n][m];
+        for(int i=0;i<n;i++){
+            for(int j =0;j<m;j++){
+                if(grid[i][j]==1 && !visited[i][j]){
+                    visited[i][j]=true;
+                    
+                    num++;              // little change
+                    group[i][j]=num;    // little change
+                    map.put(num,1);     // little change
+                    
+                    // dfs(grid,visited,n,m,i,j);
+                    dfs(grid,visited,n,m,i,j,num,group,map);
+                }
+            }
+        }
+        
+        
+        //-----> change for this question
+        int ans = 1;
+        boolean check = true;
+        for(int r=0;r<n;r++){
+            for(int c=0;c<m;c++){
+                if(grid[r][c]==0){
+                    check = false;
+                    HashSet<Integer> set = new HashSet<>();
+                    int sum = 1;
+                    for(int i=0;i<4;i++){
+                        int nx = r + x_dir[i];
+                        int ny = c + y_dir[i];
+                        if(nx >= 0 && nx < n && ny >= 0 && ny < m 
+                            && grid[nx][ny]==1){
+                               set.add(group[nx][ny]); 
+                        }
+                    }
+                    // System.out.println(set);
+                    for(int x:set){
+                        // System.out.println(map.get(x));
+                        sum += map.get(x);
+                    }
+                    
+                    ans = Math.max(ans,sum);
+                }
+            }
+        }
+        if(check) return n*m;
+        // System.out.println(Arrays.deepToString(visited));
+        // System.out.println(Arrays.deepToString(group));
+        // System.out.println(map);
+        return ans;
+        
+    }
+
+    // public void dfs(int[][] grid, boolean[][] visited,int n,int m,int x,int y){
+    public void dfs(int[][] grid, boolean[][] visited,int n,int m,int x,int y ,
+    int num,int[][] group,HashMap<Integer,Integer> map){
+        for(int i=0;i<4;i++){
+            int nx = x + x_dir[i];
+            int ny = y + y_dir[i];
+            if(nx >= 0 && nx < n && ny >= 0 && ny < m 
+            && !visited[nx][ny] && grid[nx][ny]==1){
+                visited[nx][ny] = true;
+                
+                group[nx][ny]=num;
+                map.put(num,map.get(num)+1);
+                
+                // dfs(grid,visited,n,m,nx,ny);
+                dfs(grid,visited,n,m,nx,ny,num,group,map);
+            }
+        }
+    }
+}
