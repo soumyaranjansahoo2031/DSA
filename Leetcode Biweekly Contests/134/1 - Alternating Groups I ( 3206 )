@@ -1,0 +1,35 @@
+// https://leetcode.com/problems/alternating-groups-i/description/
+// # Easy 
+// #Array  #Sliding Window
+
+class Solution {
+    public int numberOfAlternatingGroups(int[] colors) {
+        int ans = 0;
+        for(int i=1;i<colors.length-1;i++){
+            if(colors[i] != colors[i-1] && colors[i]!= colors[i+1]) ans++;
+        }
+        if(colors[0] != colors[colors.length - 1]){
+            if(colors[0] != colors[1]) ans++;
+            if(colors[colors.length - 1] != colors[colors.length-2]) ans++;
+        }
+        return ans;
+    }
+}
+
+// =================================================================================
+
+// Example 1:
+
+// Input: colors = [1,1,1]
+// Output: 0
+
+// Example 2:
+
+// Input: colors = [0,1,0,0,1]
+// Output: 3
+
+//-------------------------------------------------------
+// Constraints:
+
+// 3 <= colors.length <= 100
+// 0 <= colors[i] <= 1
