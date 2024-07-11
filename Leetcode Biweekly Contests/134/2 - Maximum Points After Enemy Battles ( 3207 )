@@ -1,0 +1,54 @@
+// https://leetcode.com/problems/maximum-points-after-enemy-battles/
+// # Medium 
+// # Array  # Greedy  # Math
+
+class Solution {
+    public long maximumPoints(int[] enemyEnergies, int currentEnergy) {
+        int n = enemyEnergies.length;
+        int mini = Integer.MAX_VALUE;
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->b-a);
+        for(int i=0;i<n;i++){
+            pq.add(enemyEnergies[i]);
+            if(enemyEnergies[i] < mini){
+                mini = enemyEnergies[i];
+            }
+        }
+        if(currentEnergy < mini) return 0;
+        int ans = 0;
+        long energy = (long) currentEnergy;
+        while(pq.size()!=1){
+            energy += (long)pq.poll();
+        }
+        return  energy/(long)mini;   
+    }     
+}
+// =============================================================================
+
+// Example 1:
+
+// Input: enemyEnergies = [3,2,2], currentEnergy = 2
+// Output: 3
+
+// Explanation:
+// The following operations can be performed to get 3 points, which is the maximum:
+// First operation on enemy 1: points increases by 1, and currentEnergy decreases by 2. So, points = 1, and currentEnergy = 0.
+// Second operation on enemy 0: currentEnergy increases by 3, and enemy 0 is marked. So, points = 1, currentEnergy = 3, and marked enemies = [0].
+// First operation on enemy 2: points increases by 1, and currentEnergy decreases by 2. So, points = 2, currentEnergy = 1, and marked enemies = [0].
+// Second operation on enemy 2: currentEnergy increases by 2, and enemy 2 is marked. So, points = 2, currentEnergy = 3, and marked enemies = [0, 2].
+// First operation on enemy 1: points increases by 1, and currentEnergy decreases by 2. So, points = 3, currentEnergy = 1, and marked enemies = [0, 2].
+
+
+// Example 2:
+
+// Input: enemyEnergies = [2], currentEnergy = 10
+// Output: 5
+
+// Explanation:
+// Performing the first operation 5 times on enemy 0 results in the maximum number of points.
+
+//------------------------------------------------------------------------------------------------------------------------------
+// Constraints:
+
+// 1 <= enemyEnergies.length <= 10^5
+// 1 <= enemyEnergies[i] <= 10^9
+// 0 <= currentEnergy <= 10^9
