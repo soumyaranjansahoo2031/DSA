@@ -1,0 +1,64 @@
+// https://leetcode.com/problems/maximum-score-from-removing-substrings/description/
+// # Medium
+// # String  # Stack  # Greedy
+
+class Solution {
+    public int maximumGain(String s, int x, int y) {
+        int a_count = 0;
+        int b_count = 0;
+        int result = 0;
+        int mini = Math.min(x,y);
+        
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+            if(ch !='a' && ch !='b'){
+                result += Math.min(a_count,b_count)*mini;
+                a_count = 0;
+                b_count = 0;
+            }
+            else if(ch =='a'){
+                if(y > x && b_count > 0){
+                    result += y;
+                    b_count--;
+                }
+                else a_count++;
+            }
+            // else if(ch =='b'){
+            else{
+                if(x > y && a_count > 0){
+                    result += x;
+                    a_count--;
+                }
+                else b_count++;
+            }
+        }
+        if(a_count != 0 && b_count != 0) result += Math.min(a_count,b_count)*mini;
+        return result;
+    }
+}
+
+// ===========================================================================================
+
+// Example 1:
+
+// Input: s = "cdbcbbaaabab", x = 4, y = 5
+// Output: 19
+// Explanation:
+// - Remove the "ba" underlined in "cdbcbbaaabab". Now, s = "cdbcbbaaab" and 5 points are added to the score.
+// - Remove the "ab" underlined in "cdbcbbaaab". Now, s = "cdbcbbaa" and 4 points are added to the score.
+// - Remove the "ba" underlined in "cdbcbbaa". Now, s = "cdbcba" and 5 points are added to the score.
+// - Remove the "ba" underlined in "cdbcba". Now, s = "cdbc" and 5 points are added to the score.
+// Total score = 5 + 4 + 5 + 5 = 19.
+
+
+// Example 2:
+
+// Input: s = "aabbaaxybbaabb", x = 5, y = 4
+// Output: 20
+ 
+//-------------------------------------------------------------------
+// Constraints:
+
+// 1 <= s.length <= 105
+// 1 <= x, y <= 104
+// s consists of lowercase English letters.
