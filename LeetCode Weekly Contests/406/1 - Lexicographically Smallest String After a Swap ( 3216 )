@@ -1,0 +1,47 @@
+// https://leetcode.com/problems/lexicographically-smallest-string-after-a-swap/
+// #Easy
+//
+
+class Solution {
+    public String getSmallestString(String s) {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<s.length()-1;i++){
+            int a = Integer.parseInt(s.charAt(i)+"");
+            int b = Integer.parseInt(s.charAt(i+1)+"");
+            if( a%2 - b%2 == 0 ){
+                if(a>b){
+                    sb.append(s.substring(0,i));
+                    sb.append(b);
+                    sb.append(a);
+                    sb.append(s.substring(i+2));
+                    return sb.toString();
+                }
+            }
+        }
+        return s;
+    }
+}
+
+//======================================================================================
+
+// Example 1:
+
+// Input: s = "45320"
+// Output: "43520"
+
+// Explanation:
+// s[1] == '5' and s[2] == '3' both have the same parity, and swapping them results in the lexicographically smallest string.
+
+// Example 2:
+
+// Input: s = "001"
+// Output: "001"
+
+// Explanation:
+// There is no need to perform a swap because s is already the lexicographically smallest.
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// Constraints:
+
+// 2 <= s.length <= 100
+// s consists only of digits.
