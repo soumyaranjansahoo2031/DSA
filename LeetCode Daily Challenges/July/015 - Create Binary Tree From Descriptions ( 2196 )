@@ -1,0 +1,92 @@
+// https://leetcode.com/problems/create-binary-tree-from-descriptions/description/
+// # Medium
+// #BST  # HashMap 
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode createBinaryTree(int[][] descriptions) {
+        HashMap<Integer,TreeNode> parent_map = new HashMap<>();
+        HashMap<Integer,TreeNode> child_map = new HashMap<>();
+        for(int[] desc : descriptions){
+            int p_value = desc[0];
+            int c_value = desc[1];
+            TreeNode p = null;
+            TreeNode c = null;
+            if(parent_map.containsKey(p_value)){
+                p = parent_map.get(p_value);
+            }
+            else{
+                if(child_map.containsKey(p_value)){
+                    p = child_map.get(p_value);
+                    parent_map.put(p_value,p);
+                }
+                else{
+                    p = new TreeNode(p_value);
+                    parent_map.put(p_value,p);
+                }
+            }
+            if(parent_map.containsKey(c_value)){
+                c = parent_map.get(c_value);
+                child_map.put(c_value,c);
+            }
+            else{
+                c = new TreeNode(c_value);
+                child_map.put(c_value,c);
+            }
+            if(desc[2]==1){
+                p.left = c;
+            }
+            else{
+                p.right = c;
+            }
+        }
+        for(Map.Entry<Integer,TreeNode> entry : parent_map.entrySet()){
+            if(!child_map.containsKey(entry.getKey())){
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+}
+
+//======================================================================================
+
+// Example 1:
+
+
+// Input: descriptions = [[20,15,1],[20,17,0],[50,20,1],[50,80,0],[80,19,1]]
+// Output: [50,20,80,15,17,19]
+// Explanation: The root node is the node with value 50 since it has no parent.
+// The resulting binary tree is shown in the diagram.
+
+
+// Example 2:
+
+
+// Input: descriptions = [[1,2,1],[2,3,0],[3,4,1]]
+// Output: [1,2,null,null,3,4]
+// Explanation: The root node is the node with value 1 since it has no parent.
+// The resulting binary tree is shown in the diagram.
+ 
+
+// Constraints:
+
+// 1 <= descriptions.length <= 104
+// descriptions[i].length == 3
+// 1 <= parenti, childi <= 105
+// 0 <= isLefti <= 1
+// The binary tree described by descriptions is valid.
