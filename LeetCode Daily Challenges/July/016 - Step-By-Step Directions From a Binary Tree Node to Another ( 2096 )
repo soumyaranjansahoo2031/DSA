@@ -1,0 +1,108 @@
+// https://leetcode.com/problems/step-by-step-directions-from-a-binary-tree-node-to-another/description/
+// # Medium
+// #BST #DFS
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        List<List<TreeNode>> res = new ArrayList<>();
+        fun(root,startValue,new ArrayList<>(),res);
+        List<TreeNode> res1 = res.get(0);
+        res.remove(0);
+        fun(root,destValue,new ArrayList<>(),res);
+        List<TreeNode> res2 = res.get(0);
+
+        StringBuilder sb = new StringBuilder();
+
+        int joint = fun2(res1,res2);
+
+        int left_num = res1.size()-joint-1;
+        for(int i=0;i<left_num;i++){
+            sb.append("U");
+        }
+        for(int i=joint+1;i<res2.size();i++){
+            TreeNode prev = res2.get(i-1);
+            TreeNode curr = res2.get(i);
+            if(prev.left==curr){
+                sb.append("L");
+            }
+            else sb.append("R");
+        }
+        return sb.toString();
+    }
+    public int fun2(List<TreeNode> res1, List<TreeNode> res2){
+        // TreeNode ans = null;
+        int count = -1;
+        for(int i=0;i<res1.size() && i<res2.size();i++){
+            if(res1.get(i)==res2.get(i)){
+                count++;
+            }
+            else return count;
+        }
+        return count;
+    }
+    public void fun(TreeNode root, int req,List<TreeNode> li,List<List<TreeNode>> res){
+        if(root == null){
+            return ; 
+        }
+        li.add(root);
+        if(root.val==req){
+            res.add(new ArrayList<>(li));
+            return;
+        }
+
+        fun(root.left,req,li,res);
+        if(res.size()>0) return;
+
+        fun(root.right,req,li,res);
+        if(res.size()>0) return;
+         
+        li.remove(li.size()-1);
+        // print(res);
+    }
+    void print(List<TreeNode> li){
+        for(int i=0;i<li.size();i++){
+            System.out.print(li.get(i).val+"->");
+        }
+        System.out.println();
+    }
+}
+
+//====================================================================================================
+
+// Example 1:
+
+// Input: root = [5,1,2,3,null,6,4], startValue = 3, destValue = 6
+// Output: "UURL"
+// Explanation: The shortest path is: 3 → 1 → 5 → 2 → 6.
+
+
+// Example 2:
+
+// Input: root = [2,1], startValue = 2, destValue = 1
+// Output: "L"
+// Explanation: The shortest path is: 2 → 1.
+
+//--------------------------------------------------------------------------
+// Constraints:
+
+// The number of nodes in the tree is n.
+// 2 <= n <= 105
+// 1 <= Node.val <= n
+// All the values in the tree are unique.
+// 1 <= startValue, destValue <= n
+// startValue != destValue
