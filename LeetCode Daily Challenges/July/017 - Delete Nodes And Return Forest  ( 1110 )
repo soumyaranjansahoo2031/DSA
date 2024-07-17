@@ -2,7 +2,75 @@
 // #Medium
 // # Binary Tree
 
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+        List<TreeNode> li = new ArrayList<>();
+        HashSet<Integer> set = new HashSet<>();
+        Queue<TreeNode> q = new LinkedList<>();
 
+        for(int x : to_delete){
+            set.add(x);
+        }
+
+        q.add(root);
+        while(!q.isEmpty()){
+            // System.out.println(q);
+            TreeNode node = q.poll();
+            if(set.contains(node.val)){
+                if(node.left != null) q.add(node.left);
+                if(node.right != null) q.add(node.right);
+                node.left = null;
+                node.right = null;
+            }
+            else{
+                li.add(node);
+                check(node,set,q);
+            }
+        }
+        return li;
+    }
+    public void check(TreeNode node,HashSet<Integer> set,Queue<TreeNode> q){
+        if(node.left == null && node.right == null) return;
+        if(node.left != null){
+            if(set.contains(node.left.val)){
+                if(node.left.left != null) q.add(node.left.left);
+                if(node.left.right != null) q.add(node.left.right);
+                node.left = null;
+            }
+            else{
+                check(node.left,set,q);
+                // System.out.println(q);
+            }
+        }
+        if(node.right != null){
+            if(set.contains(node.right.val)){
+                if(node.right.left != null) q.add(node.right.left);
+                if(node.right.right != null) q.add(node.right.right);
+                node.right = null;
+            }
+            else{
+                check(node.right,set,q);
+                // System.out.println(q);
+            }
+        }
+
+    }
+}
 
 //==============================================================================
 // Example 1:
