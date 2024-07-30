@@ -1,0 +1,54 @@
+// https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/description/
+// #Medium
+// #String #DP #Stack
+
+//===================================
+// Recursive Approach
+//========================================================================================
+class Solution {
+    public int minimumDeletions(String s) {
+        int[] arr = new int[s.length()];
+        int count =0;
+        for(int i=0;i<s.length();i++){
+            arr[i]=count;
+            if(s.charAt(i)=='b') count++;
+        }
+        return fun(s,s.length()-1,'b',arr);
+    }
+    public int fun(String s,int index,char next_char,int[] arr){
+        if(index == -1) return 0;
+
+    // if(next_char == 'b'){
+        if(s.charAt(index) == 'b'){
+            return fun(s,index-1,'b',arr);
+        }
+        else{
+            int x = fun(s,index-1,'b',arr)+1;
+            int y = arr[index];
+            return Math.min(x,y);
+        }
+    // }
+
+    }
+}
+
+
+//=======================================================================================
+// Example 1:
+
+// Input: s = "aababbab"
+// Output: 2
+// Explanation: You can either:
+// Delete the characters at 0-indexed positions 2 and 6 ("aababbab" -> "aaabbb"), or
+// Delete the characters at 0-indexed positions 3 and 6 ("aababbab" -> "aabbbb").
+// Example 2:
+
+// Input: s = "bbaaaaabb"
+// Output: 2
+// Explanation: The only solution is to delete the first two characters.
+ 
+
+// Constraints:
+
+// 1 <= s.length <= 105
+// s[i] is 'a' or 'b'​​.
