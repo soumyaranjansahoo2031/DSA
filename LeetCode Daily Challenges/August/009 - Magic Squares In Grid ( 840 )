@@ -1,0 +1,80 @@
+// https://leetcode.com/problems/magic-squares-in-grid/description/
+// Medium
+// 
+//=================================================================
+class Solution {
+    public int numMagicSquaresInside(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        // for(int i=0;i<n;i++){
+        //     System.out.println(Arrays.toString(grid[i]));
+        // }
+        int ans = 0;
+        for(int i=0;i<=n-3;i++){
+            for(int j=0;j<=m-3;j++){
+                if( check(grid,i,j) ) ans++;
+            }
+        }
+        return ans;
+    }
+    public boolean check (int[][] grid, int r,int c){
+        //check all elements from 1 to 9 is present or not ?
+        HashSet<Integer> set = new HashSet<>();
+        for(int i=r;i<r+3;i++){
+            for(int j=c;j<c+3;j++){
+                if(grid[i][j] >=1 && grid[i][j] <=9){
+                    set.add(grid[i][j]);
+                }
+            }
+        }
+        if(set.size() != 9) return false;
+        // check all rows
+        for(int i=r;i<r+3;i++){
+            int sum = 0;
+            for(int j =c;j<c+3;j++){
+                sum += grid[i][j];
+            }
+            if(sum != 15) return false;
+        }
+        // check all columns
+        for(int j=c;j<c+3;j++){
+            int sum = 0;
+            for(int i = r;i<r+3;i++){
+                sum += grid[i][j];
+            }
+            if(sum != 15) return false;
+        }
+        // check all diagonals
+        if(grid[r][c]+grid[r+1][c+1]+grid[r+2][c+2] != 15) return false;
+        if(grid[r+2][c] + grid[r+1][c+1] + grid[r][c+2] != 15) return false;
+
+        return true;
+    }
+}
+
+//=================================================================
+
+// Example 1:
+
+// Input: grid = [[4,3,8,4],[9,5,1,9],[2,7,6,2]]
+// Output: 1
+// Explanation: 
+// The following subgrid is a 3 x 3 magic square:
+
+// while this one is not:
+
+// In total, there is only one magic square inside the given grid.
+
+
+// Example 2:
+
+// Input: grid = [[8]]
+// Output: 0
+ 
+//-----------------------------------------------------------------------
+// Constraints:
+
+// row == grid.length
+// col == grid[i].length
+// 1 <= row, col <= 10
+// 0 <= grid[i][j] <= 15
