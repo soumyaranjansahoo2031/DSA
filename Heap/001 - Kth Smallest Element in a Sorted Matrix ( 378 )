@@ -1,0 +1,21 @@
+// https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/
+// Medium
+// # Priority Queue # Heap
+
+//===================================================================================
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->b-a);
+        for(int[] arr : matrix){
+            for(int num : arr){
+                pq.add(num);
+                if(pq.size()>k){
+                    // System.out.println(pq.poll());
+                    pq.poll();
+                }
+            }
+        }
+        return pq.peek();
+    }
+}
+//===================================================================================
