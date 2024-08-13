@@ -1,0 +1,50 @@
+// https://leetcode.com/problems/combination-sum-ii/description/
+// Medium
+// # Backtracking
+
+//=================================================================
+class Solution {
+    List<List<Integer>> ans = new ArrayList<>();
+    // HashSet<List<Integer>> set = new HashSet<>();
+    public List<List<Integer>> combinationSum2(int[] cand, int t) {
+        Arrays.sort(cand);
+        List<Integer> li = new ArrayList<Integer>();
+        fun(0,cand,t,li);
+        return ans;
+    }
+    private void fun(int index,int[]cand, int t,List<Integer> li){
+        // System.out.print(li);
+        // System.out.print(ans);
+        // System.out.print(set);
+        // System.out.println(t);
+        if(t==0){
+            System.out.print(li);
+            ans.add(li);
+            System.out.println(ans);
+            return ;
+        }
+        // if(index >=cand.length){
+        //     return ;
+        // }
+        // // int not_take =
+        // fun(index+1,cand,t,new ArrayList<>(li));
+        // // int take = 0;
+        // if(t>=cand[index]){
+        //     // take = 
+        //     li.add(cand[index]);
+        //     fun(index+1,cand,t-cand[index],new ArrayList<>(li));
+        // }
+        for (int i = index; i < cand.length; i++) {
+            // Skip duplicates
+            
+            if (i > index && cand[i] == cand[i - 1]) continue;
+            System.out.println(cand[i]);
+            if (cand[i] > t) break;  // No need to proceed further
+            
+            li.add(cand[i]);
+            fun(i + 1,cand, t - cand[i], new ArrayList<>(li));
+            li.remove(li.size() - 1);  // Backtrack
+        }
+    }
+}
+//=================================================================
