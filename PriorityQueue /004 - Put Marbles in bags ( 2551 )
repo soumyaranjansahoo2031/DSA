@@ -1,0 +1,86 @@
+// https://leetcode.com/problems/put-marbles-in-bags/description/
+// Medium
+// # Greedy # Priority Queue
+// ## Amazon
+//==================================================================
+
+//==================================================================
+class Solution {
+    public long putMarbles(int[] weights, int k) {
+        
+        List<Long> li = new ArrayList<>();
+
+        int p = k-1;
+        fun(weights,p,0,li,0,0);
+
+        Collections.sort(li);
+        return li.get(li.size()-1)-li.get(0);
+    }
+    public void fun(int[] weights,int p,int curr,List<Long> li,long count,int index){
+        if(curr == p){
+            li.add(count);
+            return;
+        }
+        if(index == weights.length-1){
+            return ;
+        }
+        if(weights.length-1-index < p-curr) return;
+        //put
+        curr++;
+        count += (long)weights[index]+(long)weights[index+1];
+        fun(weights,p,curr,li,count,index+1);
+
+        //skip
+        curr--;
+        count -= (long)weights[index]+(long)weights[index+1];
+        fun(weights,p,curr,li,count,index+1);
+    }
+}
+
+//==================================================================
+
+//===================================================================
+class Solution {
+    public long putMarbles(int[] weights, int k) {
+        int n = weights.length;
+        if (k == 1) return 0;
+
+        long[] sums = new long[n - 1];
+        for (int i = 0; i < n - 1; i++) {
+            sums[i] = (long)weights[i] + (long)weights[i + 1];
+        }
+
+        Arrays.sort(sums);
+
+        long maxSum = 0, minSum = 0;
+        for (int i = 0; i < k - 1; i++) {
+            minSum += sums[i];
+            maxSum += sums[sums.length - 1 - i];
+        }
+
+        return maxSum - minSum;
+    }
+}
+
+//===================================================================
+// Example 1:
+
+// Input: weights = [1,3,5,1], k = 2
+// Output: 4
+// Explanation: 
+// The distribution [1],[3,5,1] results in the minimal score of (1+1) + (3+1) = 6. 
+// The distribution [1,3],[5,1], results in the maximal score of (1+3) + (5+1) = 10. 
+// Thus, we return their difference 10 - 6 = 4.
+
+// Example 2:
+
+// Input: weights = [1, 3], k = 2
+// Output: 0
+// Explanation: The only distribution possible is [1],[3]. 
+// Since both the maximal and minimal score are the same, we return 0.
+ 
+
+// Constraints:
+
+// 1 <= k <= weights.length <= 105
+// 1 <= weights[i] <= 109
