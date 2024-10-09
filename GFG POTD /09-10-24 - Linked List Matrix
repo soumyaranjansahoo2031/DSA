@@ -1,0 +1,89 @@
+// https://www.geeksforgeeks.org/problems/linked-list-matrix/1
+// #LinkedList #Matrix
+// #Easy
+//------------------------------------------------------------------
+
+// User function Template for Java
+
+/*class Node
+
+class Node
+{
+   int data;
+   Node right,down;
+
+   Node(int data){
+       this.data = data;
+       right = null;
+       down = null;
+   }
+}
+*/
+/*Function should return the head of the 2D LL.*/
+class Solution {
+    static Node construct(int arr[][]) {
+        // Add your code here.
+        Node head = new Node(arr[0][0]);
+        Node curr_start = head;
+        Node curr ;
+        Node prev_start = curr_start;;
+        Node prev;
+        for(int i=0;i<arr.length;i++){
+            if(i > 0){
+                prev_start = curr_start;
+                curr_start = new Node(arr[i][0]);
+                // System.out.println(prev_start.data +" "+curr_start.data);
+                prev_start.down = curr_start;
+            }
+            curr = curr_start;
+            prev = prev_start.right;
+            for(int j = 1;j<arr[0].length;j++){
+                Node temp = new Node(arr[i][j]);
+                curr.right = temp;
+                curr = curr.right;
+                if(i > 0){
+                    prev.down = temp;
+                    prev = prev.right; 
+                }
+            }
+        }
+        return head;
+    }
+}
+//------------------------------------------------------------------
+
+import java.util.*;
+
+Class Node{
+  int data;
+  Node right,down;
+  Node(int data){
+    this.data = data;
+    right = null;
+    down = null;
+  }
+}
+
+public class Linked_list_2D_Matrix {
+    void display(Node head){
+        Node dp = head;
+        while(dp != null){
+            Node rp = dp;
+            while(rp != null){
+                System.out.println( rp.data + " ");
+                if(rp.right != null)
+                    System.out.print(rp.right.data + " ");
+                else
+                    System.out.print("null ");
+                if(rp.down != null )
+                    System.out.print(rp.down.data + " ");
+                else
+                    System.out.print("null ");
+                rp = rp.right;
+            }
+            dp = dp.down;
+        }
+    }
+}
+
+            
