@@ -1,0 +1,52 @@
+// https://leetcode.com/problems/maximum-width-ramp/description/
+// #Medium
+// #Array #Stack #Monotonic Stack #Sliding Window ( two pointer approach )
+--------------------------------------------------------------------
+// brute force soluton - O(N2)
+--------------------------------------------------------------------
+class Solution {
+    public int maxWidthRamp(int[] nums) {
+        int n = nums.length;
+        int[] arr = new int[n];
+        for(int i=0;i<n;i++){
+            for(int j=n-1;j>=i;j--){
+                if(nums[i] <= nums[j]){
+                    arr[i] = j-i;
+                    break;
+                }
+            }
+        }
+        int ans = 0;
+        for(int i=0;i<n;i++){
+            ans = Math.max(ans,arr[i]);
+        }
+        return ans;
+    }
+}
+//---------------------------------------------------------
+// optimised solution
+//----------------------------------------------------------
+class Solution {
+    public int maxWidthRamp(int[] nums) {
+        int n = nums.length;
+        int[] arr = new int[n];
+        int max = 0;
+        for(int i = n-1;i>=0;i--){
+            max=Math.max(max,nums[i]);
+            arr[i]=max;
+            // System.out.println(Arrays.toString(arr));
+        }
+        // System.out.println(Arrays.toString(arr));
+        int ans = 0;
+        for(int i=0;i<n-1;i++){
+            int count =0;
+            for(int j =i+1;j<n;j++){
+                if(nums[i] <= arr[j]) count++;
+                else break;
+            }
+            ans = Math.max(ans,count);
+            // System.out.println(ans);
+        }
+        return ans;
+    }
+}
