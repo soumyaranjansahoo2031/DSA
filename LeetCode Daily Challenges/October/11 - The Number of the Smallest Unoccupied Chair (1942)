@@ -1,0 +1,44 @@
+// https://leetcode.com/problems/the-number-of-the-smallest-unoccupied-chair/description/
+// #Medium
+// #HashMap #PriorityQueue
+-----------------------------------------------------------------------------------------
+class Solution {
+    public int smallestChair(int[][] times, int targetFriend) {
+        int key = times[targetFriend][0];
+        int n = times.length;
+        PriorityQueue<Integer> pq1 = new PriorityQueue<>();
+        for(int i=0;i<n;i++){
+            pq1.add(i);
+        }
+        Arrays.sort(times,(a,b)->a[0]-b[0]);
+
+        PriorityQueue<Pair> pq2 = new PriorityQueue<>((a,b)->a.second - b.second);
+        HashMap<Integer,Integer> map = new HashMap<>();
+
+        for(int i=0;i<n;i++){
+            int start = times[i][0];
+            int end = times[i][1];
+            
+            while(! pq2.isEmpty()){
+                if(start >= pq2.peek().second){
+                    pq1.add(map.get(pq2.peek().first));
+                    pq2.poll();
+                }
+                else{
+                    break;
+                }
+            }
+            pq2.add(new Pair(start,end));
+            map.put(start,pq1.poll());
+        }
+        return map.get(key);
+    }
+}
+class Pair{
+    int first;
+    int second;
+    Pair(int first, int second){
+        this.first = first;
+        this.second = second;
+    }
+}
