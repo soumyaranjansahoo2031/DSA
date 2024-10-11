@@ -1,0 +1,18 @@
+// https://www.geeksforgeeks.org/problems/reorganize-the-array4810/1
+// #Easy
+// #Array
+// ------------------------------------------
+class Solution{
+    public List<Integer> rearrange(List<Integer> arr) {
+        // Code here
+        List<Integer> li = new ArrayList<>();
+        for(int i=0;i<arr.size();i++){
+            li.add(-1);
+        }
+        
+        for(int i=0;i<arr.size();i++){
+            if(arr.get(i) != -1) li.set(arr.get(i),arr.get(i));
+        }
+        return li;
+    }
+}
