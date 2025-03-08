@@ -1,0 +1,25 @@
+#Sliding Window 
+##Easy
+
+#https://leetcode.com/problems/minimum-recolors-to-get-k-consecutive-black-blocks/description/?envType=daily-question&envId=2025-03-08
+
+class Solution {
+    public int minimumRecolors(String blocks, int k) {
+        int count = 0;
+        int min = Integer.MAX_VALUE;
+
+        // creating the window of size k
+        for(int i = 0;i<k;i++){
+            if(blocks.charAt(i) == 'W' ) count++;
+        }
+        min = Math.min(min,count);
+
+        // shifting he window
+        for(int i = k;i<blocks.length();i++){
+            if(blocks.charAt(i) == 'W' ) count++;
+            if(blocks.charAt(i-k) == 'W' ) count--;
+            min = Math.min(min,count);
+        }
+        return min;
+    }
+}
