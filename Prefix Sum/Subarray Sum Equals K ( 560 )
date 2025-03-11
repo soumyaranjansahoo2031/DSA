@@ -27,37 +27,25 @@ Optimised Approach
 class Solution {
     public int subarraySum(int[] arr, int k) {
         int n = arr.length;
-        int count = 0;
-        
+
         int[] prefix = new int[n];
         prefix[0]=arr[0];
         for(int i=1;i<n;i++){
             prefix[i]=prefix[i-1]+arr[i];
         }
 
-        HashMap<Integer,List<Integer>> map = new HashMap<>();
-        // map.put(0,-1);
+        int count = 0;
+        
+        HashMap<Integer,Integer> map = new HashMap<>();
+        map.put(0,1);
+
         for(int i=0;i<n;i++){
-            if(prefix[i]==k){
-                // ans = Math.max(ans,i+1);
-                count++;
+            if(map.containsKey(prefix[i]-k)){
+                count += map.get(prefix[i]-k);
             }
-            int rem = prefix[i]-k;
-            if(map.containsKey(rem)){
-                // ans = Math.max(ans,i-map.get(rem));
-                count+=map.get(rem).size();
-            }
-            // }
-            if(!map.containsKey(prefix[i])){
-                List<Integer> newList = new ArrayList<>();
-                newList.add(i);
-                map.put(prefix[i], newList);
-            }
-            else{
-                map.get(prefix[i]).add(i);
-            }
+            map.put(prefix[i],map.getOrDefault(prefix[i],0)+1);
         }
-        // return ans;
+        
         return count;
     }
 }
