@@ -1,0 +1,63 @@
+#https://leetcode.com/problems/subarray-sum-equals-k/description/
+
+## Medium
+### Prefix Sum ### HashMap
+
+-------------------------------------------------------------------------------
+Brute Force Approach
+-------------------------------------------------------------------------------
+class Solution {
+    public int subarraySum(int[] arr, int k) {
+        int n = arr.length;
+        int count = 0;
+
+        for(int i = 0;i<n;i++){
+            int sum = 0;
+            for(int j = i;j<n;j++){
+                sum += arr[j];
+                if(sum == k) count++;
+            }
+        }
+        return count;
+    }
+}
+-------------------------------------------------------------------------------
+Optimised Approach
+-------------------------------------------------------------------------------
+class Solution {
+    public int subarraySum(int[] arr, int k) {
+        int n = arr.length;
+        int count = 0;
+        
+        int[] prefix = new int[n];
+        prefix[0]=arr[0];
+        for(int i=1;i<n;i++){
+            prefix[i]=prefix[i-1]+arr[i];
+        }
+
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        // map.put(0,-1);
+        for(int i=0;i<n;i++){
+            if(prefix[i]==k){
+                // ans = Math.max(ans,i+1);
+                count++;
+            }
+            int rem = prefix[i]-k;
+            if(map.containsKey(rem)){
+                // ans = Math.max(ans,i-map.get(rem));
+                count+=map.get(rem).size();
+            }
+            // }
+            if(!map.containsKey(prefix[i])){
+                List<Integer> newList = new ArrayList<>();
+                newList.add(i);
+                map.put(prefix[i], newList);
+            }
+            else{
+                map.get(prefix[i]).add(i);
+            }
+        }
+        // return ans;
+        return count;
+    }
+}
