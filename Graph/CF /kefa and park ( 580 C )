@@ -1,0 +1,74 @@
+import java.util.*;
+
+public class Main{
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+    
+    int n = sc.nextInt();// number of verices
+    int m = sc.nextInt();// number of consecutive cats can be tolerated
+    
+    boolean isCat[] = new boolean[n+1];
+    for(int i = 1;i<=n;i++){
+      int num = sc.nextInt();
+      if(num == 1) isCat[i] = true;
+      else isCat[i] = false;
+    }
+    int numOfEdges = n-1;
+    
+    int[][] edges = new int[numOfEdges][2];
+    for(int i = 0;i<numOfEdges;i++){
+      int u = sc.nextInt();
+      int v = sc.nextInt();
+      edges[i][0] = u;
+      edges[i][1] = v;
+    }
+    int ans = solve(n+1,m,edges,isCat);
+    System.out.println(ans);
+  }
+  public static ArrayList<ArrayList<Integer>> getAdj(int n,int[][] edges){
+    ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+    for(int i = 0;i<n;i++){
+      adj.add(new ArrayList<>());
+    }
+    for(int[] edge : edges){
+      int u = edge[0];
+      int v = edge[1];
+      adj.get(u).add(v);
+      adj.get(v).add(u);
+    }
+    return adj;
+  }
+  public static int solve(int n,int m,int[][] edges,boolean[] isCat){
+    ArrayList<ArrayList<Integer>> adj = getAdj(n,edges);
+    int[] count = new int[1]; // storing the restautant count;
+    boolean[] isVisited = new boolean[n];
+    dfs(1,n,m,adj,0,isCat,count,isVisited);
+    
+    return count[0];
+  }
+  public static void dfs(int start,int n,int m,ArrayList<ArrayList<Integer>> adj,int consecutiveCount,boolean[] isCat,int[] count,boolean[] isVisited){
+    isVisited[start]=true;
+    if(isCat[start]==true){
+      consecutiveCount++;
+      if(consecutiveCount > m) return;
+    }
+    else {
+      consecutiveCount = 0;
+    }
+    if(adj.get(start).size()==1 && start != 1) count[0]++;
+    for(int nx : adj.get(start)){
+      if(!isVisited[nx]) dfs(nx,n,m,adj,consecutiveCount,isCat,count,isVisited);
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+}
