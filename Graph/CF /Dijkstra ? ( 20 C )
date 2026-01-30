@@ -1,0 +1,99 @@
+import java.util.*;
+
+public class Main{
+//-----------------------------------------------------------------------------------------
+//------------------- Take Input -----------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+    
+    int n = sc.nextInt();// number of verices
+    int m = sc.nextInt();// number of edges
+    
+    int[][] edges = new int[m][3];
+    for(int i = 0;i<m;i++){
+      int u = sc.nextInt();
+      int v = sc.nextInt();
+      int w = sc.nextInt();
+      edges[i][0] = u;
+      edges[i][1] = v;
+      edges[i][2] = w;
+    }
+    ArrayList<Integer> ans = solve(n+1,m,edges);
+    // System.out.println(ans);
+    ans.forEach(x->System.out.print(x+" "));System.out.println();
+  }
+//----------------------------------------------------------------------------------------------
+//------------------- Construct the graph / Adjacency list -----------------------------------------------------------
+//-----------------------------------------------------------------------------------------------
+  public static ArrayList<ArrayList<int[]>> getAdj(int n,int m,int[][] edges){
+    ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+    for(int i = 0;i<n;i++){
+      adj.add(new ArrayList<>());
+    }
+    for(int[] edge : edges){
+      int u = edge[0];
+      int v = edge[1];
+      int w = edge[2];
+      adj.get(u).add(new int[] {v,w});
+      adj.get(v).add(new int[] {u,w});
+    }
+    return adj;
+  }
+//-------------------------------------------------------------------------------------------------
+//------------------- solve function -----------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+  public static ArrayList<Integer> solve(int n,int m,int[][] edges){
+    ArrayList<ArrayList<int[]>> adj = getAdj(n,m,edges);
+    int[] parent = new int[n];
+
+    dijkstra(1,n,m,adj,parent);
+    
+    ArrayList<Integer> ans = new ArrayList<>();
+    if(parent[n-1] == 0){
+        return new ArrayList<>(Arrays.asList(-1));
+    }
+    
+    int start = n-1;
+    while(start != -1){
+      ans.add(start);
+      start = parent[start];
+    }
+    Collections.reverse(ans);
+    return ans;
+  }
+//----------------------------------------------------------------------------------------------------
+//------------------- Dijkstra -----------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+  public static void dijkstra(int start,int n,int m,ArrayList<ArrayList<int[]>> adj,int[] parent){
+    boolean[] isFinalized = new boolean[n];
+    int[] dis = new int[n];
+    Arrays.fill(dis,Integer.MAX_VALUE);
+    dis[start] = 0;
+    
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[1]-b[1]);
+    pq.add(new int[] {start,0});
+    parent[start] = -1;
+    
+    while(!pq.isEmpty()){
+      int[] curr = pq.poll();
+      int u = curr[0];
+      if(isFinalized[u]) continue;
+      isFinalized[u] = true;
+      for(int[] newEle : adj.get(u)){
+        int v = newEle[0];
+        int w = newEle[1];
+        
+        if(!isFinalized[v]){
+          if(dis[v] > dis[u] + w ){
+            dis[v] = dis[u] + w;
+            parent[v] = u;
+          }
+          pq.add(new int[] {v,dis[v]});
+        }
+      }
+    }
+    // System.out.println(Arrays.toString(dis));
+    // return dis[n-1];
+  }
+}
