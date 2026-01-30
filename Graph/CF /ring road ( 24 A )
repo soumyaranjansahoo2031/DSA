@@ -1,0 +1,67 @@
+import java.util.*;
+
+public class Main{
+  static int totalCost = 0;
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+    
+    int n = sc.nextInt();// number of verices
+    int m = n;// number of edges
+    
+    int[][] edges = new int[m][3];
+    for(int i = 0;i<m;i++){
+      int u = sc.nextInt();
+      int v = sc.nextInt();
+      int w = sc.nextInt();
+      edges[i][0] = u;
+      edges[i][1] = v;
+      edges[i][2] = w;
+    }
+    int ans = solve(n+1,m,edges);
+    System.out.println(ans);
+    // ans.forEach(x->System.out.print(x+" "));System.out.println();
+  }
+  public static ArrayList<ArrayList<int[]>> getAdj(int n,int[][] edges){
+    ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+    for(int i = 0;i<n;i++){
+      adj.add(new ArrayList<>());
+    }
+    for(int[] edge : edges){
+      int u = edge[0];
+      int v = edge[1];
+      int w = edge[2];
+      adj.get(u).add(new int[] {v,0});
+      adj.get(v).add(new int[] {u,w});
+      totalCost += w;
+    }
+    return adj;
+  }
+  public static int solve(int n,int m,int[][] edges){
+    ArrayList<ArrayList<int[]>> adj = getAdj(n,edges);
+    boolean[] visited = new boolean[n];
+    
+    int ans = dfs(1,-1,visited,adj);
+    
+    return Math.min(ans,totalCost-ans);
+        
+  }
+  
+  public static int dfs(int u, int parent,boolean[] vis,ArrayList<ArrayList<int[]>> adj) {
+
+    vis[u] = true;
+    int cost = 0;
+
+    for (int[] e : adj.get(u)) {
+        int v = e[0], w = e[1];
+
+        if (!vis[v]) {
+            cost += w + dfs(v, u, vis, adj);
+        }
+        else if (v != parent && v == 1) {
+            return w;
+        }
+    }
+    return cost;
+}
+
+}
