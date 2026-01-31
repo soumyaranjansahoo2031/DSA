@@ -1,0 +1,78 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+  		int t = 1;
+  		while(t-- > 0){
+  		    int n = sc.nextInt();
+  		    int b = sc.nextInt();
+  		    
+  		    int numEdges = n-1;
+  		    int[][] edges = new int[numEdges][2];
+  		    
+  		    for(int i = 0;i<numEdges;i++){
+  		      edges[i][0] = sc.nextInt();
+  		      edges[i][1] = sc.nextInt();
+  		    }
+  		    
+  		    int ans = solve(n+1,numEdges,edges,b);
+  		    System.out.println(ans);
+  		}
+    }
+    public static ArrayList<ArrayList<Integer>> getAdj(int n,int m,int[][] edges){
+      ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+      for(int i = 0;i<n;i++){
+        adj.add(new ArrayList<>());
+      }
+      for(int i = 0;i<m;i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+        adj.get(u).add(v);
+        adj.get(v).add(u);
+        // System.out.println(adj);
+      }
+      return adj;
+    }
+    public static int solve(int n,int m,int[][] edges,int b){
+      ArrayList<ArrayList<Integer>> adj = getAdj(n,m,edges);
+      
+      boolean[] visited = new boolean[n];
+      int[] parent = new int[n];
+      int[] nextGen = new int[n];
+      int[] levels = new int[n];
+      
+      // System.out.println(adj);
+      dfs(1,0,adj,visited,parent,nextGen,levels);
+      // System.out.println(Arrays.toString(parent));
+      // System.out.println(Arrays.toString(nextGen));
+      // System.out.println(Arrays.toString(levels));
+      int ans = 0;
+      int mid = b;
+      int count = 0;
+      int maxReach = (levels[b]+1)/2;
+      while(mid != 0 && count < maxReach){
+        ans = Math.max(ans,(levels[mid]+nextGen[mid])*2);
+        mid = parent[mid];
+        count++;
+      }
+      return ans;
+    }
+    public static int dfs(int curr,int parent,ArrayList<ArrayList<Integer>> adj,boolean[] visited,
+                                                                          int[] parents,
+                                                                          int[] nextGen,
+                                                                          int[] levels){
+      visited[curr] = true; 
+      int maxi = 0;
+      for(int neigh : adj.get(curr)){
+        if(!visited[neigh]){
+          parents[neigh] = curr;
+          levels[neigh] = 1+levels[curr];
+          int ans = 1 + dfs(neigh,curr,adj,visited,parents,nextGen,levels);
+          maxi = Math.max(maxi,ans);
+        }
+      }
+      nextGen[curr] = maxi;
+      return maxi;
+    }
+}
