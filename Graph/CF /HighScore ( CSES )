@@ -1,0 +1,100 @@
+import java.util.*;
+
+public class HighScore{
+//-----------------------------------------------------------------------------------------
+//------------------- Take Input -----------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+    
+    int n = sc.nextInt();// number of verices
+    int m = sc.nextInt();// number of edges
+    
+    long[][] edges = new long[m][3];
+    for(int i = 0;i<m;i++){
+      long u = sc.nextLong();
+      long v = sc.nextLong();
+      long w = sc.nextLong();
+      edges[i][0] = u*1L;
+      edges[i][1] = v*1L;
+      edges[i][2] = -w*1L;
+    }
+    long ans = bellmanFord(n,m,edges);
+    System.out.println(ans);
+  }
+
+//----------------------------------------------------------------------------------------------------
+//------------------- Bellman Ford -----------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+  public static long bellmanFord(int n,int m,long[][] edges){
+    
+    ArrayList<ArrayList<long[]>> adj = getAdj(n+1,m,edges);
+
+    long[] dis = new long[n+1];
+    Arrays.fill(dis,Long.MAX_VALUE);
+    dis[1] = 0;
+    for(int i = 1;i<=n-1;i++){
+      for(long[] edge : edges){
+        int u = (int)edge[0];
+        int v = (int)edge[1];
+        long w = edge[2];
+        if(dis[u] == Long.MAX_VALUE) continue;
+        if(dis[v] > dis[u] + w ){
+            dis[v] = dis[u] + w;
+        }
+      }
+    }
+    // System.out.println(Arrays.toString(dis));
+    for(long[] edge : edges){
+        int u = (int)edge[0];
+        int v = (int)edge[1];
+        long w = edge[2];
+        if(dis[v] > dis[u] + w ){
+          // return -1;
+          // System.out.println(v+" "+u);
+          dis[v] = dis[u] + w;
+          if(bfs(1,v,n,adj) && bfs(v,n,n,adj)) return -1;
+        }
+    }
+    return -dis[n];     
+  }
+  //----------------------------------------------------------------------------------------------------
+  //----------------------------- BFS Traversal --------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------------
+  public static boolean bfs(int start,int destination,int n,ArrayList<ArrayList<long[]>> adj){
+     Queue<Integer> q = new LinkedList<>();
+     boolean[] visited = new boolean[n+1];
+     q.add(start);
+     visited[start] = true;
+     while(!q.isEmpty()){
+       int curr = q.poll();
+      // System.out.println(curr);
+       if(curr == destination) return true;
+       for(long[] neigh : adj.get(curr)){
+         int v = (int)neigh[0];
+         if(!visited[v]){
+           q.add(v);
+           visited[v]=true;
+         }
+       }
+     }
+     return false;
+  }
+  //----------------------------------------------------------------------------------------------
+  //------------------- Construct the graph / Adjacency list -----------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  public static ArrayList<ArrayList<long[]>> getAdj(int n,int m,long[][] edges){
+    ArrayList<ArrayList<long[]>> adj = new ArrayList<>();
+    for(int i = 0;i<n;i++){
+      adj.add(new ArrayList<>());
+    }
+    for(long[] edge : edges){
+      int u = (int)edge[0];
+      int v = (int)edge[1];
+      long w = edge[2];
+      adj.get(u).add(new long[] {v,w});
+      // adj.get(v).add(new long[] {u,w});
+    }
+    return adj;
+  }
+}
