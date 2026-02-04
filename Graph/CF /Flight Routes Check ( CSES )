@@ -1,0 +1,115 @@
+import java.io.*;
+import java.util.*;
+
+public class FlightRoutesCheck {
+
+    public static void main(String[] args) {
+        FastScanner fs = new FastScanner();
+        // Scanner sc = new Scanner(System.in);
+
+        int n = fs.nextInt();
+        int m = fs.nextInt();
+
+        int[][] edges = new int[m][2];
+        for (int i = 0; i < m; i++) {
+            edges[i][0] = fs.nextInt();
+            edges[i][1] = fs.nextInt();
+        }
+
+        solve(n, m, edges);
+    }
+
+    static ArrayList<ArrayList<Integer>> getAdj(int n, int[][] edges, boolean forward) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i <= n; i++) adj.add(new ArrayList<>());
+
+        for (int[] e : edges) {
+            if (forward) adj.get(e[0]).add(e[1]);
+            else adj.get(e[1]).add(e[0]);
+        }
+        return adj;
+    }
+
+    static void solve(int n, int m, int[][] edges) {
+
+        ArrayList<ArrayList<Integer>> adj = getAdj(n, edges, true);
+        ArrayList<ArrayList<Integer>> rev = getAdj(n, edges, false);
+
+        boolean[] visited = new boolean[n + 1];
+
+        // DFS on original graph
+        dfs(1, adj, visited);
+        for (int i = 1; i <= n; i++) {
+            if (!visited[i]) {
+                System.out.println("NO");
+                System.out.println(1 + " " + i);
+                return;
+            }
+        }
+
+        // DFS on reversed graph
+        Arrays.fill(visited, false);
+        dfs(1, rev, visited);
+        for (int i = 1; i <= n; i++) {
+            if (!visited[i]) {
+                System.out.println("NO");
+                System.out.println(i + " " + 1);
+                return;
+            }
+        }
+
+        System.out.println("YES");
+    }
+    // static void bfs(int start, ArrayList<ArrayList<Integer>> adj, boolean[] visited){
+    //   Queue<Integer> q = new LinkedList<>();
+    //   q.add(start);
+    //   visited[start] = true;
+    //   while(!q.isEmpty()){
+    //     int curr = q.poll();
+    //     for(int neigh : adj.get(curr)){
+    //       if(!visited[neigh]){
+    //         q.add(neigh);
+    //         visited[neigh] =true;
+    //       }
+    //     }
+    //   }
+    // }
+
+    static void dfs(int u, ArrayList<ArrayList<Integer>> adj, boolean[] visited) {
+        visited[u] = true;
+        for (int v : adj.get(u)) {
+            if (!visited[v]) dfs(v, adj, visited);
+        }
+    }
+    // Fast Input
+    static class FastScanner {
+        private final byte[] buffer = new byte[1 << 16];
+        private int ptr = 0, len = 0;
+        private final InputStream in = System.in;
+    
+        private int read() {
+            if (ptr >= len) {
+                try {
+                    len = in.read(buffer);
+                    ptr = 0;
+                    if (len <= 0) return -1;
+                } catch (IOException e) {
+                    return -1;
+                }
+            }
+            return buffer[ptr++];
+        }
+    
+        int nextInt() {
+            int c, sign = 1, val = 0;
+            do { c = read(); } while (c <= ' ');
+            if (c == '-') { sign = -1; c = read(); }
+            while (c > ' ') {
+                val = val * 10 + (c - '0');
+                c = read();
+            }
+            return val * sign;
+        }
+    }
+
+}
