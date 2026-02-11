@@ -1,0 +1,81 @@
+import java.util.*;
+
+public class Main{
+//-----------------------------------------------------------------------------------------
+//------------------- Take Input -----------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+    
+    int n = sc.nextInt();// number of verices
+    int m = sc.nextInt();// number of edges
+    
+    int[][] edges = new int[m][3];
+    for(int i = 0;i<m;i++){
+      int u = sc.nextInt();
+      int v = sc.nextInt();
+      int w = sc.nextInt();
+      edges[i][0] = u;
+      edges[i][1] = v;
+      edges[i][2] = w;
+    }
+    int ans = solve(n+1,m,edges);
+    System.out.println(ans);
+    // ans.forEach(x->System.out.print(x+" "));System.out.println();
+  }
+//----------------------------------------------------------------------------------------------
+//------------------- Construct the graph / Adjacency list -----------------------------------------------------------
+//-----------------------------------------------------------------------------------------------
+  public static ArrayList<ArrayList<int[]>> getAdj(int n,int m,int[][] edges){
+    ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+    for(int i = 0;i<n;i++){
+      adj.add(new ArrayList<>());
+    }
+    for(int[] edge : edges){
+      int u = edge[0];
+      int v = edge[1];
+      int w = edge[2];
+      adj.get(u).add(new int[] {v,w});
+      adj.get(v).add(new int[] {u,w});
+    }
+    return adj;
+  }
+//-------------------------------------------------------------------------------------------------
+//------------------- solve function -----------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+  public static int solve(int n,int m,int[][] edges){
+    ArrayList<ArrayList<int[]>> adj = getAdj(n,m,edges);
+    int ans = prims(n,m,adj);
+    
+    return ans;
+  }
+//----------------------------------------------------------------------------------------------------
+//------------------- prims -----------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+  public static int prims(int n,int m,ArrayList<ArrayList<int[]>> adj){
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[2]-b[2]);
+        
+        pq.add(new int[]{-1,0,0});
+        
+        boolean[] isFinalized = new boolean[V];
+        int ans = 0;
+        while(!pq.isEmpty()){
+            int[] top = pq.poll();
+            int pa = top[0];
+            int u = top[1];
+            int d = top[2];
+            if(isFinalized[u]) continue;
+            isFinalized[u] = true;
+            ans += d;
+            for(int[] p : adj.get(u)){
+                int v = p[0];
+                int w = p[1];
+                
+                if(!isFinalized[v] ){
+                    pq.add(new int[]{u,v,w});
+                }
+            }
+        }
+        return ans;
+    }
+}
