@@ -1,0 +1,94 @@
+class NumArray {
+    int[] sta;
+    int n;
+    int[] arr;
+
+    public NumArray(int[] nums) {
+        n = nums.length;
+        sta = new int[4 * n]; // FIXED size
+        arr = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = nums[i];
+        }
+
+        buildSta(0, 0, n - 1);
+    }
+
+    public void buildSta(int i, int l, int r) {
+        if (l == r) {
+            sta[i] = arr[l];
+            return;
+        }
+        int mid = (l + r) / 2;
+        buildSta(2 * i + 1, l, mid);
+        buildSta(2 * i + 2, mid + 1, r);
+        sta[i] = sta[2 * i + 1] + sta[2 * i + 2];
+    }
+
+    public void update(int index, int val) {
+        updateSta(index, val, 0, 0, n - 1);
+    }
+
+    public void updateSta(int index, int val, int i, int l, int r) {
+        if (l == r) {
+            sta[i] = val;
+            return;
+        }
+        int mid = (l + r) / 2;
+        if (index <= mid) {
+            updateSta(index, val, 2 * i + 1, l, mid);
+        } else {
+            updateSta(index, val, 2 * i + 2, mid + 1, r);
+        }
+        sta[i] = sta[2 * i + 1] + sta[2 * i + 2];
+    }
+
+    public int sumRange(int left, int right) {
+        return sumSta(left, right, 0, 0, n - 1);
+    }
+
+    public int sumSta(int start, int end, int i, int l, int r) {
+        // No overlap
+        if (l > end || r < start) {
+            return 0;
+        }
+
+        // Complete overlap
+        if (l >= start && r <= end) {
+            return sta[i];
+        }
+
+        // Partial overlap
+        int mid = (l + r) / 2;
+        int leftSum = sumSta(start, end, 2 * i + 1, l, mid);
+        int rightSum = sumSta(start, end, 2 * i + 2, mid + 1, r);
+
+        return leftSum + rightSum;
+    }
+}
+
+// Main class
+public class Main {
+    public static void main(String[] args) {
+
+        int[] nums = {10, 2, -20, 5, 6, -8, 7, -3, 17, 8};
+
+        NumArray obj = new NumArray(nums);
+
+        System.out.println("Initial Queries:");
+        System.out.println("Sum [0, 5]: " + obj.sumRange(0, 5));
+        System.out.println("Sum [2, 7]: " + obj.sumRange(2, 7));
+
+        obj.update(2, 10); // update index 2
+
+        System.out.println("\nAfter updating index 2 to 10:");
+        System.out.println("Sum [0, 5]: " + obj.sumRange(0, 5));
+        System.out.println("Sum [2, 7]: " + obj.sumRange(2, 7));
+
+        obj.update(5, 20); // update index 5
+
+        System.out.println("\nAfter updating index 5 to 20:");
+        System.out.println("Sum [0, 9]: " + obj.sumRange(0, 9));
+    }
+}
