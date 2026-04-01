@@ -112,3 +112,31 @@ class NumArray {
         );
     }
 }
+
+public class Main {
+    public static void main(String[] args) {
+
+        int[] nums = {10, 2, -20, 5, 6, -8, 7, -3, 17, 8};
+
+        NumArray obj = new NumArray(nums);
+
+        System.out.println("Initial:");
+        System.out.println("Sum [0,5]: " + obj.sumRange(0, 5));
+        System.out.println("Min [0,5]: " + obj.minRange(0, 5));
+        System.out.println("Max [0,5]: " + obj.maxRange(0, 5));
+
+        obj.update(2, 10);
+
+        System.out.println("\nAfter update index 2 → 10:");
+        System.out.println("Sum [0,5]: " + obj.sumRange(0, 5));
+        System.out.println("Min [0,5]: " + obj.minRange(0, 5));
+        System.out.println("Max [0,5]: " + obj.maxRange(0, 5));
+
+        obj.update(5, 20);
+
+        System.out.println("\nAfter update index 5 → 20:");
+        System.out.println("Sum [0,9]: " + obj.sumRange(0, 9));
+        System.out.println("Min [0,9]: " + obj.minRange(0, 9));
+        System.out.println("Max [0,9]: " + obj.maxRange(0, 9));
+    }
+}
