@@ -1,0 +1,114 @@
+class NumArray {
+    int[] staSum, staMin, staMax;
+    int n;
+    int[] arr;
+
+    public NumArray(int[] nums) {
+        n = nums.length;
+
+        staSum = new int[4 * n];
+        staMin = new int[4 * n];
+        staMax = new int[4 * n];
+
+        arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = nums[i];
+        }
+
+        build(0, 0, n - 1);
+    }
+
+    // 🔧 Build all 3 trees
+    public void build(int i, int l, int r) {
+        if (l == r) {
+            staSum[i] = arr[l];
+            staMin[i] = arr[l];
+            staMax[i] = arr[l];
+            return;
+        }
+
+        int mid = (l + r) / 2;
+
+        build(2 * i + 1, l, mid);
+        build(2 * i + 2, mid + 1, r);
+
+        staSum[i] = staSum[2 * i + 1] + staSum[2 * i + 2];
+        staMin[i] = Math.min(staMin[2 * i + 1], staMin[2 * i + 2]);
+        staMax[i] = Math.max(staMax[2 * i + 1], staMax[2 * i + 2]);
+    }
+
+    // 🔄 Update
+    public void update(int index, int val) {
+        updateTree(index, val, 0, 0, n - 1);
+    }
+
+    public void updateTree(int index, int val, int i, int l, int r) {
+        if (l == r) {
+            staSum[i] = val;
+            staMin[i] = val;
+            staMax[i] = val;
+            return;
+        }
+
+        int mid = (l + r) / 2;
+
+        if (index <= mid) {
+            updateTree(index, val, 2 * i + 1, l, mid);
+        } else {
+            updateTree(index, val, 2 * i + 2, mid + 1, r);
+        }
+
+        staSum[i] = staSum[2 * i + 1] + staSum[2 * i + 2];
+        staMin[i] = Math.min(staMin[2 * i + 1], staMin[2 * i + 2]);
+        staMax[i] = Math.max(staMax[2 * i + 1], staMax[2 * i + 2]);
+    }
+
+    //  Sum Query
+    public int sumRange(int left, int right) {
+        return querySum(left, right, 0, 0, n - 1);
+    }
+
+    private int querySum(int start, int end, int i, int l, int r) {
+        if (l > end || r < start) return 0;
+
+        if (l >= start && r <= end) return staSum[i];
+
+        int mid = (l + r) / 2;
+        return querySum(start, end, 2 * i + 1, l, mid) +
+               querySum(start, end, 2 * i + 2, mid + 1, r);
+    }
+
+    // Min Query
+    public int minRange(int left, int right) {
+        return queryMin(left, right, 0, 0, n - 1);
+    }
+
+    private int queryMin(int start, int end, int i, int l, int r) {
+        if (l > end || r < start) return Integer.MAX_VALUE;
+
+        if (l >= start && r <= end) return staMin[i];
+
+        int mid = (l + r) / 2;
+        return Math.min(
+                queryMin(start, end, 2 * i + 1, l, mid),
+                queryMin(start, end, 2 * i + 2, mid + 1, r)
+        );
+    }
+
+    //  Max Query
+    public int maxRange(int left, int right) {
+        return queryMax(left, right, 0, 0, n - 1);
+    }
+
+    private int queryMax(int start, int end, int i, int l, int r) {
+        if (l > end || r < start) return Integer.MIN_VALUE;
+
+        if (l >= start && r <= end) return staMax[i];
+
+        int mid = (l + r) / 2;
+        return Math.max(
+                queryMax(start, end, 2 * i + 1, l, mid),
+                queryMax(start, end, 2 * i + 2, mid + 1, r)
+        );
+    }
+}
