@@ -1,0 +1,115 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+  		int t = sc.nextInt();
+  		while(t-- > 0){
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+
+        int[][] arr = new int[m][2];
+        for(int i = 0;i<m;i++){
+          arr[i][0] =  sc.nextInt();   //u;
+          arr[i][1] =  sc.nextInt();   //v;
+        }
+        int ans = solve(n,m,arr);
+        if(ans == 0) System.out.println("Brain Melt");
+        if(ans == 2) System.out.println(2);
+        if(ans == 3) System.out.println("Many");
+      }
+    }
+
+    public static int solve(int n,int m,int[][] arr){
+      int p1 = -1; int p2 = -1;
+      DSU dsu = new DSU(n);
+      for(int[] edge : arr ){
+        int u = edge[0];
+        int v = edge[1];
+        dsu.union(u-1,v-1);
+        if(p1 == -1 && p2 == -1){
+          p1 = u;
+          p2 = v;
+        }
+        else{
+          if( p1 != u && p1 != v){
+            p1 = -10;
+          }
+          if( p2 != u && p2 != v){
+            p2 = -10;
+          }
+        }
+        // System.out.println(Arrays.toString(dsu.parent));
+      }
+      int[] p = dsu.parent;
+      int[] s = dsu.size;
+
+      // System.out.println(Arrays.toString(p));
+
+      HashSet<Integer> set1 = new HashSet<>();
+      HashSet<Integer> set2 = new HashSet<>();
+      int groups = 0;
+      for(int i = 0;i<n;i++){
+        p[i] = dsu.findParent(i);
+        // System.out.println(Arrays.toString(p));
+
+        if(p[i] == i) groups++;
+        // System.out.println(p[i]);
+
+        if(set2.contains(p[i])){
+          // System.out.println("-------------------------");
+          continue;
+        }
+        if(set1.contains(p[i])){
+          set1.remove(p[i]);
+          set2.add(p[i]);
+        }
+        else{
+          set1.add(p[i]);
+        }
+        // System.out.println(set1);
+        // System.out.println(set2);
+      }
+      // System.out.println(set1);
+      // System.out.println(set2);
+      if(set1.size() > 0) return 0;
+      if(groups > 1) return 3;
+      if(p1 != -10 || p2 != -10) return 2;
+      // if( n == 3 && m == 2) return 2;
+      // if( n == 2 ) return 2;
+      return 3;
+    }
+    
+}
+
+class DSU{
+  int[] parent;
+  int[] size;
+
+  DSU(int n){
+    parent = new int[n];
+    size = new int[n];
+    for(int i = 0;i<n;i++){
+      parent[i] = i;
+    }
+    Arrays.fill(size,1);
+  }
+  int findParent(int x){
+    if(parent[x] == x) return x;
+    return parent[x] = findParent(parent[x]);
+  }
+  void union(int x,int y){
+    int px = findParent(x);
+    int py = findParent(y);
+    if(px == py) return;
+    if(size[px] > size[py]){
+      parent[py] = px;
+      size[px] += size[py];
+    }
+    else{
+      parent[px] = py;
+      size[py] += size[px];
+    }
+  }
+}
